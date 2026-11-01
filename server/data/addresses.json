@@ -1,0 +1,16 @@
+[
+  {
+    "_id": "addr_01",
+    "id": "addr_01",
+    "createdAt": "2026-10-30T16:17:09.502Z",
+    "updatedAt": "2026-10-30T16:17:09.502Z",
+    "userId": "usr_cust_01",
+    "name": "Ananya Sharma",
+    "phone": "+91 9123456789",
+    "addressLine": "Flat 402, Lotus Residency, 4th Cross Road",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "pincode": "560100",
+    "isDefault": true
+  }
+]

@@ -1,0 +1,318 @@
+[
+  {
+    "_id": "prod_regular",
+    "id": "prod_regular",
+    "createdAt": "2026-10-30T16:17:09.503Z",
+    "updatedAt": "2026-10-31T17:25:00.000Z",
+    "name": "Regular Period Kit",
+    "tier": "Regular",
+    "tagline": "daily comfort",
+    "description": "Your essential everyday hygiene companion designed for college and PG students and working professionals. Features balanced day-to-day absorbency and complete intimate hygiene essentials.",
+    "basePrice": 179,
+    "comparePrice": 229,
+    "rating": 4.8,
+    "reviewsCount": 428,
+    "isActive": true,
+    "category": "kits",
+    "quickCommerceAvailable": true,
+    "frontImage": "/images/products/regular-front.jpg",
+    "sideImage": "/images/products/regular-side.jpg",
+    "backImage": "/images/products/regular-back.jpg",
+    "topImage": "/images/products/regular-top.jpg",
+    "images": [
+      "/images/products/regular-front.jpg",
+      "/images/products/regular-inside.jpg"
+    ],
+    "features": [
+      "3 x Premium XL Sanitary Pads (High absorption for daily comfort)",
+      "2 x Breathable Panty Liners for light spotting & fresh comfort",
+      "1 x Mini Hand Sanitizer for instant on-the-go hygiene",
+      "1 x Set of Eco-Friendly Disposal Bags for clean, odor-free disposal",
+      "1 x Educational Mini-Period Guide Card with cycle care tips"
+    ],
+    "whatInside": [
+      {
+        "item": "Premium XL Sanitary Pads (High absorption for daily comfort)",
+        "count": 3,
+        "icon": "ShieldCheck"
+      },
+      {
+        "item": "Breathable Panty Liners",
+        "count": 2,
+        "icon": "Feather"
+      },
+      {
+        "item": "Mini Hand Sanitizer",
+        "count": 1,
+        "icon": "Star"
+      },
+      {
+        "item": "Set of Eco-Friendly Disposal Bags",
+        "count": 1,
+        "icon": "Package"
+      },
+      {
+        "item": "Educational Mini-Period Guide Card",
+        "count": 1,
+        "icon": "HelpCircle"
+      }
+    ],
+    "insideImage": "/images/products/regular-inside.jpg"
+  },
+  {
+    "_id": "prod_travel",
+    "id": "prod_travel",
+    "createdAt": "2026-10-30T16:17:09.503Z",
+    "updatedAt": "2026-10-31T17:25:00.000Z",
+    "name": "Travel Period Kit (No-Wash Version)",
+    "tier": "Travel",
+    "tagline": "hassle-free travel",
+    "description": "Engineered specifically for flights, long bus rides, road trips, and hectic work travels. Zero water or washing needed. Features on-the-spot cramp relief roll-on, emergency clothing stain remover spray, high-absorbency pads, and gentle intimate wet wipes.",
+    "basePrice": 249,
+    "comparePrice": 299,
+    "rating": 4.9,
+    "reviewsCount": 560,
+    "isActive": true,
+    "category": "kits",
+    "quickCommerceAvailable": true,
+    "frontImage": "/images/products/travel-front.jpg",
+    "sideImage": "/images/products/travel-side.jpg",
+    "backImage": "/images/products/travel-back.jpg",
+    "topImage": "/images/products/travel-top.jpg",
+    "images": [
+      "/images/products/travel-front.jpg",
+      "/images/products/travel-inside.jpg"
+    ],
+    "features": [
+      "1 x Cramp Pain Relief Roll-on (Mini travel format for instant relief)",
+      "1 x Instant Stain Remover Spray/Pen for clothing emergencies",
+      "1 x Set of Disposable Menstrual Cups / Travel Pads for all-day security",
+      "1 x Pocket Pack of Intimate Wet Wipes (10 counts) for effortless hygiene",
+      "Durable inner cardboard box designed for luggage & backpacks",
+      "Delivered in ~10 minutes on Blinkit, Zepto, and Instamart"
+    ],
+    "whatInside": [
+      {
+        "item": "Cramp Pain Relief Roll-on (Mini travel format for instant relief)",
+        "count": 1,
+        "icon": "Flame"
+      },
+      {
+        "item": "Instant Stain Remover Spray/Pen",
+        "count": 1,
+        "icon": "Star"
+      },
+      {
+        "item": "Set of Disposable Menstrual Cups / Travel Pads",
+        "count": 1,
+        "icon": "ShieldCheck"
+      },
+      {
+        "item": "Pocket Pack of Intimate Wet Wipes (10 counts)",
+        "count": 1,
+        "icon": "CheckCircle"
+      }
+    ],
+    "insideImage": "/images/products/travel-inside.jpg"
+  },
+  {
+    "_id": "prod_emergency",
+    "id": "prod_emergency",
+    "createdAt": "2026-10-30T16:17:09.503Z",
+    "updatedAt": "2026-10-31T17:25:00.000Z",
+    "name": "Emergency Period Kit (Compact Saviour Pouch)",
+    "tier": "Emergency",
+    "tagline": "compact saviour pouch",
+    "description": "The ultra-compact emergency kit designed to eliminate sudden period panic wherever you are. Fits seamlessly into tiny handbags, jacket pockets, and desk corners. Quick, discreet relief in 10 minutes flat.",
+    "basePrice": 49,
+    "comparePrice": 79,
+    "rating": 4.9,
+    "reviewsCount": 312,
+    "isActive": true,
+    "category": "kits",
+    "quickCommerceAvailable": true,
+    "includePainkillerTablets": true,
+    "frontImage": "/images/products/emergency-front.jpg",
+    "sideImage": "/images/products/emergency-side.jpg",
+    "backImage": "/images/products/emergency-back.jpg",
+    "topImage": "/images/products/emergency-top.jpg",
+    "images": [
+      "/images/products/emergency-front.jpg",
+      "/images/products/emergency-inside.jpg"
+    ],
+    "features": [
+      "1 x Premium Sanitary Pad with ultra-soft organic cotton",
+      "2 x Compressed Coin Tissues (expand instantly into refreshing wet wipes)",
+      "2 x Approved Painkiller Tablets (For quick unexpected relief)",
+      "1 x Ultra-Compact Travel Saviour Pouch",
+      "Delivered in 10 minutes on Blinkit, Zepto & Instamart",
+      "100% Discreet outer box with zero product markings"
+    ],
+    "whatInside": [
+      {
+        "item": "Premium Sanitary Pad",
+        "count": 1,
+        "icon": "ShieldCheck"
+      },
+      {
+        "item": "Compressed Coin Tissues",
+        "count": 2,
+        "icon": "Star"
+      },
+      {
+        "item": "Approved Painkiller Tablets (For quick unexpected relief)",
+        "count": 2,
+        "icon": "ShieldCheck"
+      },
+      {
+        "item": "Ultra-Compact Travel Saviour Pouch",
+        "count": 1,
+        "icon": "Package"
+      }
+    ],
+    "insideImage": "/images/products/emergency-inside.jpg"
+  },
+  {
+    "_id": "prod_combo_box",
+    "id": "prod_combo_box",
+    "createdAt": "2026-10-30T16:17:09.503Z",
+    "updatedAt": "2026-10-31T17:25:00.000Z",
+    "name": "Over-all Master Combo Box",
+    "tier": "Combo",
+    "tagline": "all three kits in a premium navy-blue mailer box with custom sticker and tissue wrapping",
+    "description": "The ultimate period preparedness bundle! Receive all three kits together: Regular Period Kit, Travel Period Kit, and Emergency Period Kit, presented in a luxury navy-blue mailer box with custom PeriodReady branding, tissue wrapping, and sealed stickers. Save ₹78 compared to buying individually.",
+    "basePrice": 399,
+    "comparePrice": 477,
+    "rating": 5,
+    "reviewsCount": 640,
+    "isActive": true,
+    "category": "combo",
+    "quickCommerceAvailable": true,
+    "frontImage": "/images/products/trio-combo.jpg",
+    "sideImage": "/images/products/travel-side.jpg",
+    "backImage": "/images/products/regular-back.jpg",
+    "topImage": "/images/products/emergency-top.jpg",
+    "images": [
+      "/images/products/trio-combo.jpg",
+      "/images/products/combo-inside.jpg"
+    ],
+    "features": [
+      "Includes 1 Full Regular Period Kit (with mini hot water bag)",
+      "Includes 1 Full Travel Period Kit (no-wash version with roll-on & stain spray)",
+      "Includes 1 Full Emergency Period Kit (compact saviour pouch)",
+      "Beautifully packed inside a Premium Navy Blue Mailer Box with Custom Wrapping & Sticker Seal (Perfect for gifting or personal stocking)",
+      "Best Value: Save ₹78 versus buying each kit separately (₹179 + ₹249 + ₹49 = ₹477)",
+      "Delivered in 10 minutes on Blinkit, Zepto & Instamart"
+    ],
+    "whatInside": [
+      {
+        "item": "Full Regular Period Kit",
+        "count": "Includes 1",
+        "icon": "Package"
+      },
+      {
+        "item": "Full Travel Period Kit",
+        "count": "Includes 1",
+        "icon": "Flame"
+      },
+      {
+        "item": "Full Emergency Period Kit",
+        "count": "Includes 1",
+        "icon": "ShieldCheck"
+      },
+      {
+        "item": "Beautifully packed inside a Premium Navy Blue Mailer Box with Custom Wrapping & Sticker Seal (Perfect for gifting or personal stocking)",
+        "count": "Master Packaging",
+        "icon": "Package"
+      }
+    ],
+    "insideImage": "/images/products/combo-inside.jpg"
+  },
+  {
+    "_id": "prod_hot_water_bag",
+    "id": "prod_hot_water_bag",
+    "createdAt": "2026-10-31T17:55:00.000Z",
+    "updatedAt": "2026-10-31T17:55:00.000Z",
+    "name": "Cozy Knit Hot Water Bag",
+    "tier": "Relief Aid",
+    "tagline": "soothing targeted cramp relief in pastel knit",
+    "description": "A professional e-commerce product catalog shot of a single decent, high-quality knit-textured hot water bag floating in an elegant anti-gravity setting. Features soft pastel green cable-knit texture, anti-leak thermal retention, and interactive circular color selection swatches.",
+    "basePrice": 349,
+    "comparePrice": 499,
+    "rating": 4.9,
+    "reviewsCount": 284,
+    "isActive": true,
+    "category": "relief",
+    "quickCommerceAvailable": true,
+    "frontImage": "/images/products/hot-water-bag.png",
+    "sideImage": "/images/products/hot-water-bag.jpg",
+    "backImage": "/images/products/hot-water-bag.jpg",
+    "topImage": "/images/products/hot-water-bag.jpg",
+    "images": [
+      "/images/products/hot-water-bag.png",
+      "/images/products/hot-water-bag-inside.jpg"
+    ],
+    "features": [
+      "High-grade thermal heat retention with anti-leak stopper",
+      "Luxurious cable-knit textured protective cover (removable & washable)",
+      "Instant soothing targeted relief for menstrual cramps & pelvic tension",
+      "Interactive circular color selection dots in 7 pastel shades",
+      "Delivered in 10 minutes on Blinkit, Zepto & Instamart"
+    ],
+    "whatInside": [
+      {
+        "item": "Knit-Textured Hot Water Bag with Anti-Leak Stopper",
+        "count": 1,
+        "icon": "ShieldCheck"
+      },
+      {
+        "item": "Removable & Washable Soft Cable-Knit Protective Sleeve",
+        "count": 1,
+        "icon": "Feather"
+      },
+      {
+        "item": "Vintage Brass Aesthetic Tag & Thermal Care Card",
+        "count": 1,
+        "icon": "Star"
+      }
+    ],
+    "colors": [
+      {
+        "name": "Pista Green",
+        "hex": "#93C572",
+        "colorFilter": "none"
+      },
+      {
+        "name": "Light Pink",
+        "hex": "#FBCFE8",
+        "colorFilter": "hue-rotate(250deg) saturate(1.2)"
+      },
+      {
+        "name": "Light Blue",
+        "hex": "#BAE6FD",
+        "colorFilter": "hue-rotate(110deg) saturate(1.3)"
+      },
+      {
+        "name": "Light Lavender",
+        "hex": "#E9D5FF",
+        "colorFilter": "hue-rotate(190deg) saturate(1.1)"
+      },
+      {
+        "name": "Light Green",
+        "hex": "#BBF7D0",
+        "colorFilter": "hue-rotate(15deg) saturate(1.4)"
+      },
+      {
+        "name": "White",
+        "hex": "#FFFFFF",
+        "colorFilter": "grayscale(1) brightness(1.25)"
+      },
+      {
+        "name": "Light Orange",
+        "hex": "#FED7AA",
+        "colorFilter": "hue-rotate(305deg) saturate(1.5)"
+      }
+    ],
+    "insideImage": "/images/products/hot-water-bag-inside.jpg"
+  }
+]

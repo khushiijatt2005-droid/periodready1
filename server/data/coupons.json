@@ -1,0 +1,27 @@
+[
+  {
+    "_id": "coup_student10",
+    "id": "coup_student10",
+    "createdAt": "2026-10-30T16:17:09.507Z",
+    "updatedAt": "2026-10-30T16:17:09.507Z",
+    "code": "STUDENT10",
+    "description": "10% off for college and PG students & professionals",
+    "discountType": "percentage",
+    "discountValue": 10,
+    "minOrderAmount": 99,
+    "maxDiscountAmount": 100,
+    "isActive": true
+  },
+  {
+    "_id": "coup_ready50",
+    "id": "coup_ready50",
+    "createdAt": "2026-10-30T16:17:09.507Z",
+    "updatedAt": "2026-10-30T16:17:09.507Z",
+    "code": "READY50",
+    "description": "Flat ₹50 off on orders above ₹300",
+    "discountType": "fixed",
+    "discountValue": 50,
+    "minOrderAmount": 300,
+    "isActive": true
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "_id": "4d621e9a-d925-4aab-853c-c4c060d002b1",
+    "id": "f7e3c5eb-32ac-430d-9033-dfb9e5ffa37a",
+    "createdAt": "2026-10-31T11:45:38.004Z",
+    "updatedAt": "2026-10-31T11:45:38.004Z",
+    "name": "Pragati Judev",
+    "email": "pragatijudev6@gmail.com",
+    "phone": "9301763544",
+    "password": "$2a$10$rLBqiOrtgH47S3ZujNxW1eYlhqrO3WL2Fjm7JUmMIxvCgGi5x72ti",
+    "role": "customer"
+  },
+  {
+    "_id": "usr_cust_01",
+    "id": "usr_cust_01",
+    "createdAt": "2026-10-30T16:17:09.497Z",
+    "updatedAt": "2026-10-30T16:17:09.497Z",
+    "name": "Ananya Sharma",
+    "email": "customer@periodready.com",
+    "password": "$2a$10$CjJlK6EiZ39hBdNr42A2ceyLhSBDtIsFWKWPqNxYTHp.s/jtWzpBi",
+    "phone": "+91 9123456789",
+    "role": "customer"
+  },
+  {
+    "_id": "usr_admin_01",
+    "id": "usr_admin_01",
+    "createdAt": "2026-10-30T16:17:09.483Z",
+    "updatedAt": "2026-10-30T16:17:09.496Z",
+    "name": "PeriodReady Admin",
+    "email": "admin@periodready.com",
+    "password": "$2a$10$2EqrF9dbVuH7JbfOSJbrGO1oTzkucG504uEbSbXhAfopQPTRACsY.",
+    "phone": "+91 9876543210",
+    "role": "admin"
+  }
+]

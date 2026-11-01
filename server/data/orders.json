@@ -1,0 +1,132 @@
+[
+  {
+    "_id": "7d3693ed-86ac-4e35-bab4-251d72a4b512",
+    "id": "36f015a3-db97-4771-a20e-79123dcdb08c",
+    "createdAt": "2026-10-31T11:46:43.467Z",
+    "updatedAt": "2026-10-31T11:46:56.098Z",
+    "orderNumber": "PR-203466-869",
+    "userId": "4d621e9a-d925-4aab-853c-c4c060d002b1",
+    "customerName": "Pragati Judev",
+    "customerEmail": "pragatijudev6@gmail.com",
+    "customerPhone": "9301763544",
+    "items": [
+      {
+        "productId": "prod_travel",
+        "variantId": "var_trv_1",
+        "title": "Travel Period Kit (no-wash version)",
+        "variantInfo": "undefined • 1 Kit",
+        "sku": "PR-TRV-1KIT",
+        "price": 199,
+        "quantity": 1,
+        "total": 199,
+        "image": "/images/products/travel-front.jpg"
+      }
+    ],
+    "shippingAddress": {
+      "name": "Pragati Judev",
+      "phone": "9301763544",
+      "addressLine": "Vijay nagar",
+      "city": "Indore",
+      "state": "Madhya Pradesh ",
+      "pincode": "452001"
+    },
+    "paymentMethod": "UPI (Razorpay Test)",
+    "paymentStatus": "paid",
+    "subtotal": 199,
+    "discount": 0,
+    "couponCode": null,
+    "deliveryCharge": 49,
+    "gst": 10,
+    "total": 258,
+    "status": "Placed",
+    "discreetPackagingNotice": "Discreet Packaging Guaranteed: Ships in an unmarked plain box with zero product markings on the outside.",
+    "timeline": [
+      {
+        "status": "Placed",
+        "timestamp": "2026-10-31T11:46:43.466Z",
+        "note": "Order placed successfully via UPI (Razorpay Test)."
+      },
+      {
+        "status": "Confirmed",
+        "timestamp": "2026-10-31T11:46:43.466Z",
+        "note": "Payment received & confirmed in test mode."
+      },
+      {
+        "status": "Placed",
+        "timestamp": "2026-10-31T11:46:56.097Z",
+        "note": "Order status updated to Placed by admin."
+      }
+    ]
+  },
+  {
+    "_id": "ord_demo_101",
+    "id": "ord_demo_101",
+    "createdAt": "2026-10-27T16:17:09.507Z",
+    "updatedAt": "2026-10-30T17:39:24.560Z",
+    "orderNumber": "PR-ORD-1001",
+    "userId": "usr_cust_01",
+    "customerName": "Ananya Sharma",
+    "customerEmail": "customer@periodready.com",
+    "customerPhone": "+91 9123456789",
+    "items": [
+      {
+        "productId": "prod_regular",
+        "variantId": "var_reg_1",
+        "name": "Regular Period Kit (with mini hot water bag)",
+        "packSize": "1 Kit",
+        "price": 149,
+        "quantity": 1,
+        "image": "/images/products/regular-front.jpg"
+      }
+    ],
+    "pricing": {
+      "subtotal": 149,
+      "discount": 15,
+      "couponCode": "STUDENT10",
+      "deliveryCharge": 0,
+      "gst": 24,
+      "total": 158
+    },
+    "shippingAddress": {
+      "name": "Ananya Sharma",
+      "phone": "+91 9123456789",
+      "addressLine": "Flat 402, Lotus Residency, 4th Cross Road",
+      "city": "Bengaluru",
+      "state": "Karnataka",
+      "pincode": "560100"
+    },
+    "paymentMethod": "COD",
+    "paymentStatus": "Pending",
+    "orderStatus": "Delivered",
+    "trackingTimeline": [
+      {
+        "status": "Placed",
+        "timestamp": "2026-10-27T16:17:09.507Z"
+      },
+      {
+        "status": "Confirmed",
+        "timestamp": "2026-10-27T21:05:09.507Z"
+      },
+      {
+        "status": "Packed",
+        "timestamp": "2026-10-28T04:17:09.507Z"
+      },
+      {
+        "status": "Shipped",
+        "timestamp": "2026-10-28T16:17:09.507Z"
+      },
+      {
+        "status": "Delivered",
+        "timestamp": "2026-10-29T16:17:09.507Z"
+      }
+    ],
+    "status": "Confirmed",
+    "timeline": [
+      {
+        "status": "Confirmed",
+        "timestamp": "2026-10-30T17:39:24.560Z",
+        "note": "Order status updated to Confirmed by admin."
+      }
+    ]
+  }
+]

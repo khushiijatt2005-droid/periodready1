@@ -1,0 +1,47 @@
+[
+  {
+    "_id": "about_page",
+    "id": "about_page",
+    "createdAt": "2026-10-30T16:17:09.509Z",
+    "updatedAt": "2026-10-30T16:17:09.509Z",
+    "seoTitle": "About PeriodReady | Our Story, Emergency Kits & Quality Promise",
+    "seoDescription": "Learn about PeriodReady: discreet menstrual emergency kits for college & PG students and working professionals. Thoughtfully packaged, pocket-friendly, and ready in minutes.",
+    "problemSection": {
+      "badge": "The Problem",
+      "title": "Periods Often Arrive Unexpectedly",
+      "paragraph": "Periods often arrive unexpectedly: in a lecture, at the office, on a commute or while travelling. The nearest store may be far or closed, buying pads feels awkward, and one surprise can ruin a whole day."
+    },
+    "whatIsSection": {
+      "badge": "What PeriodReady Is",
+      "title": "A Stylish, Discreet, Ready-to-Use Kit",
+      "paragraph": "PeriodReady is a stylish, discreet, ready-to-use kit designed for exactly that moment. Everything needed comes in one small pack that looks like a normal pouch, so you are never caught unprepared."
+    },
+    "whyItMatters": [
+      {
+        "title": "Saves Time",
+        "description": "No last-minute store search, and in an emergency you can order on a quick-commerce app and get it in about 10 minutes (where available)."
+      },
+      {
+        "title": "Saves Stress & Embarrassment",
+        "description": "Discreet look, plain unbranded packaging with zero awkward product labels."
+      },
+      {
+        "title": "Saves Money",
+        "description": "Low entry price starting at just ₹49, and a combo cheaper than buying all three kits separately."
+      },
+      {
+        "title": "Everything in One Grab",
+        "description": "No running to buy five different things. All hygiene and comfort essentials together in one pack."
+      },
+      {
+        "title": "Stay Confident & Keep Going",
+        "description": "Stay confident and keep going with your day without hesitation."
+      }
+    ],
+    "ourPromise": {
+      "title": "Our Promise",
+      "statement": "Quality products, honest pricing, discreet delivery.",
+      "tagline": "Be Ready. Feel Confident. Keep Going."
+    }
+  }
+]
