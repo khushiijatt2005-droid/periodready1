@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+@theme {
+  --color-indigo: #443c82;
+  --color-indigo-dark: #352e69;
+  --color-indigo-light: #564da1;
+  --color-indigo-50: #f6f5fc;
+  --color-indigo-100: #ece9f9;
+  --color-indigo-900: #231d45;
+
+  /* Baby Pink Background & Accents Theme */
+  --color-lavender: #fff0f5;
+  --color-lavender-alt: #fdf2f7;
+  --color-lavender-border: #f8c9dc;
+  --color-lavender-deep: #f3b6cf;
+
+  --color-babypink: #fff0f5;
+  --color-babypink-soft: #fdeef4;
+  --color-babypink-border: #f8c9dc;
+  --color-babypink-accent: #f3b6cf;
+
+  --color-blush: #fdebf2;
+  --color-blush-border: #f7b5cf;
+  --color-blush-accent: #fae3ec;
+
+  --color-rose: #d6457f;
+  --color-rose-dark: #b93267;
+  --color-rose-light: #e86297;
+
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+
+  --shadow-soft: 0 4px 20px -2px rgba(214, 69, 127, 0.08), 0 2px 6px -1px rgba(68, 60, 130, 0.04);
+  --shadow-lift: 0 12px 28px -4px rgba(214, 69, 127, 0.14), 0 4px 10px -2px rgba(68, 60, 130, 0.06);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: #fff0f5;
+  color: #1e1b4b;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fff0f5;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #f8c9dc;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d6457f;
+}
+
+/* Horizontal scroll styling for mobile nav */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Print styles for printable invoice */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #printable-invoice, #printable-invoice * {
+    visibility: visible;
+  }
+  #printable-invoice {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 20px;
+    background: white !important;
+    box-shadow: none !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
