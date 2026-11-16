@@ -101,6 +101,16 @@ export default function Header() {
                 </span>
               )}
             </button>
+
+            {/* Direct Admin Portal Link */}
+            <Link
+              to="/admin"
+              title="Owner Admin Dashboard"
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-full text-xs font-bold text-indigo bg-rose/10 hover:bg-rose/20 border border-rose/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <Lock className="w-3 h-3 text-rose" />
+              <span>Admin</span>
+            </Link>
           </div>
         </div>
 

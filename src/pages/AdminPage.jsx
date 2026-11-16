@@ -101,12 +101,26 @@ export default function AdminPage() {
   }, [isAdmin]);
 
   const handleAdminLogin = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     setLoginError('');
     setLoginLoading(true);
     const passToUse = adminPassword.trim() || 'Admin@PeriodReady2026';
     try {
       await login(adminEmail, passToUse);
+    } catch (err) {
+      setLoginError(err.message || 'Invalid admin credentials');
+    } finally {
+      setLoginLoading(false);
+    }
+  };
+
+  const handleDirectAdminLogin = async () => {
+    setLoginError('');
+    setLoginLoading(true);
+    setAdminEmail('periodready1@gmail.com');
+    setAdminPassword('Admin@PeriodReady2026');
+    try {
+      await login('periodready1@gmail.com', 'Admin@PeriodReady2026');
     } catch (err) {
       setLoginError(err.message || 'Invalid admin credentials');
     } finally {
@@ -381,14 +395,12 @@ export default function AdminPage() {
             </div>
             <button
               type="button"
-              onClick={() => {
-                setAdminEmail('periodready1@gmail.com');
-                setAdminPassword('Admin@PeriodReady2026');
-              }}
-              className="w-full py-2 px-3 rounded-xl bg-white hover:bg-slate-50 text-indigo font-semibold text-xs border border-lavender-border shadow-xs transition-colors flex items-center justify-center gap-1.5"
+              onClick={handleDirectAdminLogin}
+              disabled={loginLoading}
+              className="w-full py-2.5 px-3 rounded-xl bg-indigo hover:bg-indigo-dark text-white font-bold text-xs shadow-md shadow-indigo/20 transition-all flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50"
             >
-              <ShieldCheck className="w-3.5 h-3.5 text-rose" />
-              <span>1-Click Auto-Fill Credentials</span>
+              <ShieldCheck className="w-4 h-4 text-rose-light" />
+              <span>{loginLoading ? 'Opening Dashboard…' : '🚀 1-Click Instant Login to Dashboard'}</span>
             </button>
           </div>
 
