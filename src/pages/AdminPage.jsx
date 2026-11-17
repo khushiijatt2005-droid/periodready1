@@ -569,7 +569,7 @@ export default function AdminPage() {
           {/* Campaign Selector Tabs */}
           {[
             { id: 'all', label: `All Orders (${orders.length})` },
-            { id: 'live', label: `🔴 Live Customer Orders (${liveOrdersCount})`, isLive: true },
+            { id: 'live', label: `🔴 Live Orders (${liveOrdersCount})`, isLive: true },
             { id: 'diwali', label: `Diwali Campaign (${diwaliStats.count} Sales)`, icon: Sparkles },
             { id: 'week1', label: `Week 1 (${week1Stats.count} Sales)` },
           ].map((c) => (
@@ -882,7 +882,7 @@ export default function AdminPage() {
                       </div>
                       {ord.is_live ? (
                         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-xs mt-1 animate-pulse">
-                          🟢 LIVE REAL ORDER
+                          🟢 LIVE ORDER
                         </span>
                       ) : (ord.campaign?.includes('Diwali') || ord.via?.includes('Diwali')) ? (
                         <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-amber-100 text-amber-800 border border-amber-200 mt-1">
