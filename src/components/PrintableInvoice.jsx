@@ -8,6 +8,13 @@ export default function PrintableInvoice({ order, isOpen, onClose }) {
     window.print();
   };
 
+  const handleWhatsAppShare = () => {
+    const itemsText = (order.items || []).map(i => `${i.name} (x${i.quantity || 1})`).join(', ');
+    const message = `🌸 *PeriodReady Order #${order.id}*\n\n👤 *Customer:* ${order.name}\n📞 *Phone:* ${order.phone}\n📍 *Address:* ${order.address}\n📦 *Items:* ${itemsText}\n💰 *Total:* ₹${order.total} (${order.payment_method?.toUpperCase() || 'COD'})\n\n⏰ *10-Minute Emergency Menstrual Delivery*`;
+    const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+  };
+
   const invoiceDate = new Date(order.created_at || Date.now()).toLocaleDateString('en-IN', {
     day: 'numeric',
     month: 'short',
@@ -30,11 +37,17 @@ export default function PrintableInvoice({ order, isOpen, onClose }) {
 
           <div className="flex items-center gap-2">
             <button
+              onClick={handleWhatsAppShare}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition-colors"
+            >
+              <span>💬 Send on WhatsApp</span>
+            </button>
+            <button
               onClick={handlePrint}
               className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo hover:bg-indigo-dark text-white text-xs font-semibold shadow-sm transition-colors"
             >
               <Printer className="w-3.5 h-3.5" />
-              <span>Print / Save as PDF</span>
+              <span>Print / PDF</span>
             </button>
             <button
               onClick={onClose}

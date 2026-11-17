@@ -97,6 +97,15 @@ export default function AdminPage() {
   useEffect(() => {
     if (isAdmin) {
       loadData();
+      // Auto-refresh from cloud every 6 seconds so new orders from any phone appear in real-time
+      const interval = setInterval(() => {
+        dbGetOrders().then(allOrders => {
+          if (allOrders && allOrders.length > 0) {
+            setOrders(allOrders);
+          }
+        }).catch(() => {});
+      }, 6000);
+      return () => clearInterval(interval);
     }
   }, [isAdmin]);
 
@@ -155,11 +164,13 @@ export default function AdminPage() {
         if (orderDate < past30) return false;
       }
 
-      // Campaign filter
-      if (campaignFilter === 'diwali') {
+      // Campaign / Live filter
+      if (campaignFilter === 'live') {
+        if (!o.is_live) return false;
+      } else if (campaignFilter === 'diwali') {
         if (!o.campaign?.includes('Diwali') && !o.via?.includes('Diwali')) return false;
       } else if (campaignFilter === 'week1') {
-        if (o.campaign?.includes('Diwali') || o.via?.includes('Diwali')) return false;
+        if (o.campaign?.includes('Diwali') || o.via?.includes('Diwali') || o.is_live) return false;
       }
 
       // Status filter
@@ -222,6 +233,8 @@ export default function AdminPage() {
       margin: revenue > 0 ? ((profit / revenue) * 100).toFixed(1) : '0'
     };
   }, [orders, productCosts]);
+
+  const liveOrdersCount = useMemo(() => orders.filter(o => o.is_live).length, [orders]);
 
   // KPI Calculations (Cancelled orders strictly excluded from revenue & profit)
   const kpis = useMemo(() => {
@@ -456,26 +469,31 @@ export default function AdminPage() {
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6 border-b border-lavender-border">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-100 text-emerald-800 border border-emerald-200">
-              Live Cloud Database
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+              Live Cloud Active
             </span>
-            {isSupabaseConfigured ? (
-              <span className="text-[11px] text-emerald-600 font-semibold">● Supabase Connected</span>
-            ) : (
-              <span className="text-[11px] text-indigo font-medium bg-lavender px-2 py-0.5 rounded-full">
-                Integrated Shared Store (Add Supabase keys in .env to connect cloud instance)
-              </span>
-            )}
+            <span className="text-[11px] text-emerald-700 font-semibold bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+              ● All Devices &amp; Phones Connected Real-Time
+            </span>
           </div>
           <h1 className="font-serif font-bold text-2xl sm:text-3xl text-indigo mt-1">
             PeriodReady Admin Dashboard
           </h1>
           <p className="text-xs text-slate-500">
-            Live orders, revenue tracking, profit analytics, and customer roster.
+            Live orders from all customers, revenue tracking, profit analytics, and customer roster.
           </p>
         </div>
 
         <div className="flex items-center flex-wrap gap-2.5">
+          <button
+            onClick={() => loadData()}
+            title="Refresh orders from live cloud"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-semibold border border-emerald-300 shadow-xs transition-colors"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 text-emerald-600 ${loading ? 'animate-spin' : ''}`} />
+            <span>Sync Live Orders</span>
+          </button>
           <button
             onClick={handleResetCampaign}
             title="Reload 1st Week Baseline + 2nd Week Diwali Campaign data"
@@ -551,6 +569,7 @@ export default function AdminPage() {
           {/* Campaign Selector Tabs */}
           {[
             { id: 'all', label: `All Orders (${orders.length})` },
+            { id: 'live', label: `🔴 Live Customer Orders (${liveOrdersCount})`, isLive: true },
             { id: 'diwali', label: `Diwali Campaign (${diwaliStats.count} Sales)`, icon: Sparkles },
             { id: 'week1', label: `Week 1 (${week1Stats.count} Sales)` },
           ].map((c) => (
@@ -560,7 +579,9 @@ export default function AdminPage() {
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
                 campaignFilter === c.id
                   ? 'bg-indigo text-white shadow-xs'
-                  : 'text-slate-600 bg-lavender/60 hover:bg-lavender'
+                  : c.isLive && liveOrdersCount > 0
+                    ? 'text-emerald-800 bg-emerald-100/80 border border-emerald-300 animate-pulse'
+                    : 'text-slate-600 bg-lavender/60 hover:bg-lavender'
               }`}
             >
               {c.icon && <c.icon className="w-3.5 h-3.5 text-amber-400" />}
@@ -859,7 +880,11 @@ export default function AdminPage() {
                           minute: '2-digit'
                         })}
                       </div>
-                      {(ord.campaign?.includes('Diwali') || ord.via?.includes('Diwali')) ? (
+                      {ord.is_live ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-xs mt-1 animate-pulse">
+                          🟢 LIVE REAL ORDER
+                        </span>
+                      ) : (ord.campaign?.includes('Diwali') || ord.via?.includes('Diwali')) ? (
                         <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-amber-100 text-amber-800 border border-amber-200 mt-1">
                           <Sparkles className="w-2.5 h-2.5 text-amber-600" /> Diwali Campaign
                         </span>

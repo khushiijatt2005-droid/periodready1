@@ -24,6 +24,39 @@ const STORAGE_KEYS = {
   CURRENT_USER: 'periodready_auth_user_v1'
 };
 
+// Global Cloud Sync Database Bucket (Instant cross-device sync between all phones & laptops)
+const CLOUD_BUCKET = 'https://kvdb.io/NgGCtkUVJutBACgT8FB18P';
+
+async function fetchCloudData(endpoint, fallback = []) {
+  try {
+    const res = await fetch(`${CLOUD_BUCKET}/${endpoint}?_t=${Date.now()}`, { 
+      cache: 'no-store',
+      headers: { 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data)) return data;
+    }
+  } catch (err) {
+    console.warn(`Cloud fetch error for ${endpoint}:`, err);
+  }
+  return fallback;
+}
+
+async function postCloudData(endpoint, data) {
+  try {
+    await fetch(`${CLOUD_BUCKET}/${endpoint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return true;
+  } catch (err) {
+    console.warn(`Cloud post error for ${endpoint}:`, err);
+    return false;
+  }
+}
+
 // Default product cost benchmarks for profit analytics
 const DEFAULT_COSTS = [
   { product_id: 'emergency-kit', product_name: 'Emergency Period Kit (Compact Saviour Pouch)', price: 49, cost_per_unit: 18 },
@@ -85,11 +118,29 @@ export async function dbGetCustomers() {
         .order('created_at', { ascending: false });
       if (!error && data && data.length > 0) return data;
     } catch (e) {
-      console.warn('Supabase fetch failed, falling back to local store', e);
+      console.warn('Supabase fetch failed, falling back to cloud/local store', e);
     }
   }
-  const { customers } = ensureSeedData();
-  return customers;
+
+  const cloudCustomers = await fetchCloudData('periodready_customers', []);
+  const { customers: seedCustomers } = ensureSeedData();
+
+  const seenEmails = new Set();
+  const merged = [];
+  for (const c of cloudCustomers) {
+    if (c && c.email && !seenEmails.has(c.email)) {
+      seenEmails.add(c.email);
+      merged.push(c);
+    }
+  }
+  for (const c of seedCustomers) {
+    if (c && c.email && !seenEmails.has(c.email)) {
+      seenEmails.add(c.email);
+      merged.push(c);
+    }
+  }
+
+  return merged;
 }
 
 export async function dbUpsertCustomer(customer) {
@@ -112,7 +163,21 @@ export async function dbUpsertCustomer(customer) {
   }
   setLocalData(STORAGE_KEYS.CUSTOMERS, current);
 
-  // 2. Save Supabase if configured
+  // 2. Save cloud
+  try {
+    const cloudCustomers = await fetchCloudData('periodready_customers', []);
+    const cIdx = cloudCustomers.findIndex(c => c.email === customerRecord.email);
+    if (cIdx >= 0) {
+      cloudCustomers[cIdx] = { ...cloudCustomers[cIdx], ...customerRecord };
+    } else {
+      cloudCustomers.unshift(customerRecord);
+    }
+    await postCloudData('periodready_customers', cloudCustomers);
+  } catch (e) {
+    console.warn('Cloud customer upsert error', e);
+  }
+
+  // 3. Save Supabase if configured
   if (isSupabaseConfigured && supabase) {
     try {
       await supabase.from('customers').upsert(customerRecord, { onConflict: 'email' });
@@ -134,11 +199,43 @@ export async function dbGetOrders() {
         .order('created_at', { ascending: false });
       if (!error && data && data.length > 0) return data;
     } catch (e) {
-      console.warn('Supabase orders fetch error, falling back to local', e);
+      console.warn('Supabase orders fetch error, falling back to cloud/local', e);
     }
   }
-  const { orders } = ensureSeedData();
-  return orders;
+
+  // Fetch real live orders from Cloud Bucket (syncs across all phones/browsers)
+  const cloudLiveOrders = await fetchCloudData('periodready_orders', []);
+  const { orders: seedOrders } = ensureSeedData();
+
+  const seenIds = new Set();
+  const merged = [];
+
+  // Live orders from cloud at the very top
+  for (const ord of cloudLiveOrders) {
+    if (ord && ord.id && !seenIds.has(ord.id)) {
+      seenIds.add(ord.id);
+      merged.push({ ...ord, is_live: true });
+    }
+  }
+
+  // Local storage orders (if placed offline on same device)
+  const localOrders = getLocalData(STORAGE_KEYS.ORDERS, []);
+  for (const ord of localOrders) {
+    if (ord && ord.id && !seenIds.has(ord.id)) {
+      seenIds.add(ord.id);
+      merged.push(ord);
+    }
+  }
+
+  // Seed / Campaign orders below
+  for (const ord of seedOrders) {
+    if (ord && ord.id && !seenIds.has(ord.id)) {
+      seenIds.add(ord.id);
+      merged.push(ord);
+    }
+  }
+
+  return merged;
 }
 
 export async function dbCreateOrder(orderData) {
@@ -156,6 +253,7 @@ export async function dbCreateOrder(orderData) {
     paid: orderData.paid || false,
     via: orderData.via || 'PeriodReady Web',
     reference: orderData.reference || null,
+    is_live: true,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString()
   };
@@ -164,6 +262,15 @@ export async function dbCreateOrder(orderData) {
   const current = getLocalData(STORAGE_KEYS.ORDERS, []);
   current.unshift(orderRecord);
   setLocalData(STORAGE_KEYS.ORDERS, current);
+
+  // 2. Broadcast immediately to Cloud Bucket (reaches all devices in real-time)
+  try {
+    const existingCloud = await fetchCloudData('periodready_orders', []);
+    const updatedCloud = [orderRecord, ...existingCloud.filter(o => o.id !== orderRecord.id)];
+    await postCloudData('periodready_orders', updatedCloud);
+  } catch (err) {
+    console.error('Error broadcasting to cloud orders:', err);
+  }
 
   // Update customer's last order date
   if (orderData.email) {
@@ -174,7 +281,7 @@ export async function dbCreateOrder(orderData) {
     });
   }
 
-  // 2. Save to Supabase
+  // 3. Save to Supabase if configured
   if (isSupabaseConfigured && supabase) {
     try {
       const { error } = await supabase.from('orders').insert([orderRecord]);
@@ -201,7 +308,23 @@ export async function dbUpdateOrderStatus(orderId, newStatus) {
     setLocalData(STORAGE_KEYS.ORDERS, current);
   }
 
-  // 2. Update Supabase
+  // 2. Update Cloud Bucket
+  try {
+    const cloudOrders = await fetchCloudData('periodready_orders', []);
+    const cIdx = cloudOrders.findIndex(o => o.id === orderId);
+    if (cIdx >= 0) {
+      cloudOrders[cIdx].status = newStatus;
+      cloudOrders[cIdx].updated_at = new Date().toISOString();
+      if (newStatus === 'Delivered' && !cloudOrders[cIdx].paid) {
+        cloudOrders[cIdx].paid = true;
+      }
+      await postCloudData('periodready_orders', cloudOrders);
+    }
+  } catch (err) {
+    console.warn('Error updating cloud status:', err);
+  }
+
+  // 3. Update Supabase
   if (isSupabaseConfigured && supabase) {
     try {
       const updatePayload = { 
@@ -230,7 +353,20 @@ export async function dbUpdateOrderPayment(orderId, isPaid) {
     setLocalData(STORAGE_KEYS.ORDERS, current);
   }
 
-  // 2. Supabase
+  // 2. Cloud Bucket
+  try {
+    const cloudOrders = await fetchCloudData('periodready_orders', []);
+    const cIdx = cloudOrders.findIndex(o => o.id === orderId);
+    if (cIdx >= 0) {
+      cloudOrders[cIdx].paid = isPaid;
+      cloudOrders[cIdx].updated_at = new Date().toISOString();
+      await postCloudData('periodready_orders', cloudOrders);
+    }
+  } catch (err) {
+    console.warn('Error updating cloud payment:', err);
+  }
+
+  // 3. Supabase
   if (isSupabaseConfigured && supabase) {
     try {
       await supabase.from('orders').update({ paid: isPaid, updated_at: new Date().toISOString() }).eq('id', orderId);
