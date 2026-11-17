@@ -4,3 +4,5 @@ dist
 .env.local
 .DS_Store
 products_source
+
+.vercel

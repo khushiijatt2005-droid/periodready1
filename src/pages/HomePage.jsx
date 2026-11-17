@@ -202,14 +202,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* "PICK WHAT YOU NEED" PRODUCT TILES GRID */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* "SHOP ALL KITS" PRODUCT TILES GRID */}
+      <section id="shop-kits" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24">
         <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14 space-y-3">
           <span className="text-xs font-bold uppercase tracking-wider text-rose">
             Emergency Care Collection
           </span>
           <h2 className="font-serif font-bold text-3xl sm:text-4xl text-indigo tracking-tight">
-            Pick What You Need Right Now
+            Shop All Kits · Pick What You Need
           </h2>
           <p className="text-slate-600 text-sm sm:text-base">
             Every kit is purpose-engineered to solve menstrual surprises wherever you are — whether in college, commuting, or enduring intense cramp pain.
