@@ -41,11 +41,11 @@ export default function ProductImageSlider({ images, activeIndexOverride = null,
 
   return (
     <div className="relative group overflow-hidden rounded-2xl bg-white border border-lavender-border">
-      {/* Scrollable Container with Scroll-Snap */}
+      {/* Scrollable Container with Scroll-Snap with explicit height so it never collapses to 0 */}
       <div
         ref={containerRef}
         onScroll={handleScroll}
-        className="flex w-full overflow-x-auto snap-x snap-mandatory hide-scrollbar aspect-[4/3] sm:aspect-[16/10] items-center bg-gradient-to-b from-[#fff5f8]/60 via-white to-white"
+        className="flex w-full overflow-x-auto snap-x snap-mandatory hide-scrollbar h-64 sm:h-80 min-h-[250px] items-center bg-gradient-to-b from-[#fff5f8]/60 via-white to-white"
       >
         {images.map((img, idx) => (
           <div
@@ -55,9 +55,13 @@ export default function ProductImageSlider({ images, activeIndexOverride = null,
             <img
               src={img.url}
               alt={img.alt || `Product Image ${idx + 1}`}
-              className="max-h-full max-w-full object-contain transition-all duration-300 group-hover:scale-[1.03] drop-shadow-[0_12px_22px_rgba(68,60,130,0.15)]"
+              className="max-h-full max-w-full w-auto h-auto object-contain transition-all duration-300 group-hover:scale-[1.03] drop-shadow-[0_12px_22px_rgba(68,60,130,0.15)]"
               loading={idx === 0 ? "eager" : "lazy"}
-              decoding="sync"
+              onError={(e) => {
+                if (e.target.src.endsWith('.png')) {
+                  e.target.src = e.target.src.replace('.png', '.jpg');
+                }
+              }}
             />
           </div>
         ))}

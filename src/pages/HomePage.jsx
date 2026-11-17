@@ -229,6 +229,11 @@ export default function HomePage() {
                     src={prod.images[0].url}
                     alt={prod.name}
                     className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-[0_10px_20px_rgba(68,60,130,0.14)]"
+                    onError={(e) => {
+                      if (e.target.src.endsWith('.png')) {
+                        e.target.src = e.target.src.replace('.png', '.jpg');
+                      }
+                    }}
                   />
                   <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-[11px] font-bold bg-indigo text-white shadow-sm">
                     {prod.badge}
