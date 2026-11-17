@@ -190,12 +190,14 @@ export default function PrintableInvoice({ order, isOpen, onClose }) {
           <div className="border-t border-slate-200 pt-4 flex flex-col items-end">
             <div className="w-full max-w-xs space-y-1.5 text-xs sm:text-sm">
               <div className="flex justify-between text-slate-600">
-                <span>Subtotal:</span>
-                <span>₹{order.total}</span>
+                <span>Items Subtotal:</span>
+                <span>₹{order.subtotal || (order.total - (order.delivery_fee || 0))}</span>
               </div>
               <div className="flex justify-between text-slate-600">
-                <span>10-Min Delivery:</span>
-                <span className="text-emerald-600 font-semibold">FREE (Emergency Promo)</span>
+                <span>Rider Delivery:</span>
+                <span className="font-semibold text-indigo">
+                  {order.delivery_fee ? `₹${order.delivery_fee}` : (order.delivery_zone ? '₹15' : 'FREE')}
+                </span>
               </div>
               <div className="flex justify-between text-base font-bold text-indigo pt-2 border-t border-slate-200">
                 <span>Grand Total:</span>

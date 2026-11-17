@@ -939,6 +939,11 @@ export default function AdminPage() {
                     {/* Total & Payment */}
                     <td className="py-3 px-2">
                       <div className="font-bold text-slate-900">₹{ord.total}</div>
+                      {ord.delivery_fee ? (
+                        <div className="text-[10px] text-slate-500 font-medium">
+                          (incl. ₹{ord.delivery_fee} delivery)
+                        </div>
+                      ) : null}
                       {ord.paid ? (
                         <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">
                           PAID ({ord.reference || 'ONLINE'})

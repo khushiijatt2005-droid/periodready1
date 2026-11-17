@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Trash2, Plus, Minus, ArrowRight, ShieldCheck, MapPin, CreditCard, Banknote, Sparkles, User, Phone } from 'lucide-react';
+import { X, Trash2, Plus, Minus, ArrowRight, ShieldCheck, MapPin, CreditCard, Banknote, Sparkles, User, Phone, Navigation } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -10,7 +10,13 @@ export default function CartDrawer() {
   const { 
     items, 
     itemCount, 
+    subtotal,
+    deliveryFee,
     total, 
+    selectedZone,
+    setSelectedZone,
+    currentZone,
+    deliveryZones,
     isDrawerOpen, 
     setIsDrawerOpen, 
     updateQuantity, 
@@ -89,7 +95,10 @@ export default function CartDrawer() {
         name: finalName,
         email: finalEmail,
         phone: finalPhone,
-        address: address.trim(),
+        address: `${address.trim()} [${currentZone?.name || 'Indore'}]`,
+        delivery_zone: currentZone?.name || 'Indore',
+        delivery_fee: deliveryFee,
+        subtotal: subtotal,
         items: items,
         total: total,
         payment_method: method === 'online' ? 'online' : 'cod',
@@ -264,6 +273,30 @@ export default function CartDrawer() {
                     </div>
                   )}
 
+                  {/* Delivery Location / Area Selector */}
+                  <div className="pt-2">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5 flex items-center justify-between">
+                      <span className="flex items-center gap-1.5">
+                        <Navigation className="w-3.5 h-3.5 text-indigo" />
+                        Delivery Area (Indore)
+                      </span>
+                      <span className="text-[10px] text-emerald-800 font-bold bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-300">
+                        +₹{deliveryFee} Delivery
+                      </span>
+                    </label>
+                    <select
+                      value={selectedZone}
+                      onChange={(e) => setSelectedZone(e.target.value)}
+                      className="w-full p-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm bg-white font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo/30 focus:border-indigo"
+                    >
+                      {deliveryZones && deliveryZones.map((zone) => (
+                        <option key={zone.id} value={zone.id}>
+                          {zone.name} — ₹{zone.fee} ({zone.time})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
                   {/* Delivery Address Field */}
                   <div className="pt-2">
                     <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5 flex items-center justify-between">
@@ -338,12 +371,15 @@ export default function CartDrawer() {
               <div className="p-4 sm:p-6 border-t border-slate-200 bg-slate-50 space-y-3">
                 <div className="space-y-1.5 text-xs sm:text-sm">
                   <div className="flex justify-between text-slate-600">
-                    <span>Subtotal:</span>
-                    <span className="font-semibold text-slate-900">₹{total}</span>
+                    <span>Kits Subtotal:</span>
+                    <span className="font-semibold text-slate-900">₹{subtotal}</span>
                   </div>
                   <div className="flex justify-between text-slate-600">
-                    <span>10-Minute Instant Delivery:</span>
-                    <span className="text-emerald-600 font-bold">FREE</span>
+                    <span className="flex items-center gap-1">
+                      <span>Rider Delivery:</span>
+                      <span className="text-[10px] text-slate-400">({currentZone?.time || '~10 Mins'})</span>
+                    </span>
+                    <span className="font-semibold text-indigo">₹{deliveryFee}</span>
                   </div>
                   <div className="flex justify-between text-base font-bold text-indigo pt-2 border-t border-slate-200">
                     <span>Total Amount:</span>

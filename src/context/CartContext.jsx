@@ -5,6 +5,17 @@ const CartContext = createContext();
 
 const CART_STORAGE_KEY = 'periodready_cart_v1';
 const ADDRESS_STORAGE_KEY = 'periodready_last_address_v1';
+const ZONE_STORAGE_KEY = 'periodready_delivery_zone_v1';
+
+export const INDORE_DELIVERY_ZONES = [
+  { id: 'vijay_nagar', name: 'Vijay Nagar / Scheme 54 / LIG (HQ Hub)', fee: 15, time: '~10 Mins' },
+  { id: 'palasia', name: 'Palasia / Geeta Bhawan / New Palasia', fee: 19, time: '~10-12 Mins' },
+  { id: 'bhawarkua', name: 'Bhawarkua / Sapna Sangeeta / Tower Square', fee: 25, time: '~12-15 Mins' },
+  { id: 'rajwada', name: 'Rajwada / Old City / Annapurna', fee: 25, time: '~15 Mins' },
+  { id: 'mr10', name: 'MR 10 / Super Corridor / IDA Schemes', fee: 29, time: '~15 Mins' },
+  { id: 'rau_campuses', name: 'Rau / Silicon City / Medi-Caps / IIM', fee: 35, time: '~15-18 Mins' },
+  { id: 'other', name: 'Other Indore Localities', fee: 25, time: '~15 Mins' }
+];
 
 export function CartProvider({ children }) {
   const { user, setAuthModalOpen, setPendingAddToCart } = useAuth();
@@ -21,8 +32,19 @@ export function CartProvider({ children }) {
   const [address, setAddress] = useState(() => {
     return localStorage.getItem(ADDRESS_STORAGE_KEY) || '';
   });
+  const [selectedZone, setSelectedZone] = useState(() => {
+    return localStorage.getItem(ZONE_STORAGE_KEY) || 'vijay_nagar';
+  });
   const [recentOrder, setRecentOrder] = useState(null);
   const [isInvoiceOpen, setIsInvoiceOpen] = useState(false);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(ZONE_STORAGE_KEY, selectedZone);
+    } catch (e) {
+      // safe fallback
+    }
+  }, [selectedZone]);
 
   // Sync cart to localStorage
   useEffect(() => {
@@ -138,7 +160,9 @@ export function CartProvider({ children }) {
 
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const deliveryFee = 0; // Emergency 10-min free delivery promo
+  
+  const currentZone = INDORE_DELIVERY_ZONES.find(z => z.id === selectedZone) || INDORE_DELIVERY_ZONES[0];
+  const deliveryFee = items.length > 0 ? currentZone.fee : 0;
   const total = subtotal + deliveryFee;
 
   return (
@@ -148,6 +172,10 @@ export function CartProvider({ children }) {
       subtotal,
       deliveryFee,
       total,
+      selectedZone,
+      setSelectedZone,
+      currentZone,
+      deliveryZones: INDORE_DELIVERY_ZONES,
       address,
       setAddress,
       isDrawerOpen,
