@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Trash2, Plus, Minus, ArrowRight, ShieldCheck, MapPin, CreditCard, Banknote, Sparkles } from 'lucide-react';
+import { X, Trash2, Plus, Minus, ArrowRight, ShieldCheck, MapPin, CreditCard, Banknote, Sparkles, User, Phone } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -27,7 +27,10 @@ export default function CartDrawer() {
   const [paymentChoice, setPaymentChoice] = useState('online'); // 'online' | 'cod'
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [guestName, setGuestName] = useState('');
+  const [guestPhone, setGuestPhone] = useState('');
   const [addressError, setAddressError] = useState('');
+  const [contactError, setContactError] = useState('');
 
   if (!isDrawerOpen) return null;
 
@@ -44,6 +47,18 @@ export default function CartDrawer() {
   };
 
   const handleCheckoutClick = () => {
+    if (!user) {
+      if (!guestName.trim()) {
+        setContactError('Please enter your name for delivery.');
+        return;
+      }
+      if (!guestPhone.trim() || guestPhone.replace(/\D/g, '').length < 10) {
+        setContactError('Please enter a valid 10-digit mobile number.');
+        return;
+      }
+    }
+    setContactError('');
+
     if (!address.trim()) {
       setAddressError('Please enter your campus gate, PG reception, or office address for 10-minute delivery.');
       return;
@@ -64,12 +79,16 @@ export default function CartDrawer() {
   const processOrder = async ({ paid, reference, method }) => {
     setIsSubmitting(true);
     try {
+      const finalName = user?.name || guestName.trim() || 'Indore Customer';
+      const finalPhone = user?.phone || guestPhone.trim();
+      const finalEmail = user?.email || (guestPhone.trim() ? `${guestPhone.replace(/\D/g, '')}@periodready.in` : 'guest@periodready.in');
+
       const orderData = {
-        customer_id: user?.id,
-        customer: user?.name || 'Customer',
-        name: user?.name || 'Customer',
-        email: user?.email || '',
-        phone: user?.phone || '',
+        customer_id: user?.id || `GUEST-${Date.now()}`,
+        customer: finalName,
+        name: finalName,
+        email: finalEmail,
+        phone: finalPhone,
         address: address.trim(),
         items: items,
         total: total,
@@ -203,6 +222,47 @@ export default function CartDrawer() {
                       </div>
                     ))}
                   </div>
+
+                  {/* Customer Contact Fields (If not logged in) */}
+                  {!user && (
+                    <div className="pt-2 space-y-2.5 bg-lavender/30 p-3 rounded-2xl border border-lavender-border">
+                      <div className="text-xs font-bold text-indigo flex items-center gap-1.5">
+                        <User className="w-3.5 h-3.5 text-rose" />
+                        <span>Recipient Details (For Delivery Rider)</span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div>
+                          <label className="block text-[10px] font-semibold text-slate-600 mb-1">Your Name</label>
+                          <input
+                            type="text"
+                            value={guestName}
+                            onChange={(e) => {
+                              setGuestName(e.target.value);
+                              if (contactError) setContactError('');
+                            }}
+                            placeholder="e.g. Pooja Sharma"
+                            className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-indigo/20 focus:border-indigo"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-semibold text-slate-600 mb-1">Mobile Number (Calling)</label>
+                          <input
+                            type="tel"
+                            value={guestPhone}
+                            onChange={(e) => {
+                              setGuestPhone(e.target.value);
+                              if (contactError) setContactError('');
+                            }}
+                            placeholder="e.g. 98260 12345"
+                            className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-indigo/20 focus:border-indigo"
+                          />
+                        </div>
+                      </div>
+                      {contactError && (
+                        <p className="text-red-500 text-[11px] font-medium">{contactError}</p>
+                      )}
+                    </div>
+                  )}
 
                   {/* Delivery Address Field */}
                   <div className="pt-2">
