@@ -898,9 +898,22 @@ export default function AdminPage() {
                     {/* Customer & Phone */}
                     <td className="py-3 px-2">
                       <div className="font-semibold text-slate-900">{ord.name}</div>
-                      <div className="text-[11px] text-indigo flex items-center gap-1">
-                        <Phone className="w-3 h-3" />
+                      <div className="text-[11px] text-indigo flex items-center gap-1.5 mt-0.5">
+                        <Phone className="w-3 h-3 text-slate-400" />
                         <span>{ord.phone}</span>
+                        {ord.phone && (
+                          <a
+                            href={`https://wa.me/91${(ord.phone || '').replace(/\D/g, '').slice(-10)}?text=${encodeURIComponent(
+                              `🌸 Hello ${ord.name}!\n\nYour PeriodReady Emergency Menstrual Kit Order #${ord.id} is confirmed!\n\n📦 Items: ${(ord.items || []).map(i => `${i.name} (x${i.quantity || 1})`).join(', ')}\n💰 Total: ₹${ord.total} (${ord.payment_method?.toUpperCase() || 'COD'})\n📍 Delivery Address: ${ord.address}\n\n⏰ Our rider is on the way for 10-minute delivery. Stay confident! - PeriodReady Indore`
+                            )}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-emerald-100 hover:bg-emerald-200 text-emerald-800 transition-colors ml-1"
+                            title="Send WhatsApp confirmation to customer"
+                          >
+                            💬 WhatsApp
+                          </a>
+                        )}
                       </div>
                     </td>
 
@@ -1004,6 +1017,18 @@ export default function AdminPage() {
                             <Printer className="w-3.5 h-3.5 text-slate-600" />
                             <span>View Invoice</span>
                           </button>
+
+                          <a
+                            href={`https://wa.me/91${(ord.phone || '').replace(/\D/g, '').slice(-10)}?text=${encodeURIComponent(
+                              `🌸 Hello ${ord.name}!\n\nYour PeriodReady Emergency Menstrual Kit Order #${ord.id} is confirmed!\n\n📦 Items: ${(ord.items || []).map(i => `${i.name} (x${i.quantity || 1})`).join(', ')}\n💰 Total: ₹${ord.total} (${ord.payment_method?.toUpperCase() || 'COD'})\n📍 Delivery Address: ${ord.address}\n\n⏰ Our rider is on the way for 10-minute delivery. - PeriodReady Indore`
+                            )}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full px-3 py-1.5 text-xs text-emerald-700 hover:bg-emerald-50 flex items-center gap-2 font-medium"
+                          >
+                            <span>💬</span>
+                            <span>WhatsApp Customer</span>
+                          </a>
 
                           <a
                             href={`tel:${ord.phone}`}

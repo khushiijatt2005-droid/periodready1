@@ -61,6 +61,27 @@ export default function PrintableInvoice({ order, isOpen, onClose }) {
         {/* Printable Area */}
         <div id="printable-invoice" className="p-8 sm:p-10 bg-white text-slate-800">
           
+          {/* WhatsApp Confirmation Banner for Customer */}
+          <div className="mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 flex flex-col sm:flex-row items-center justify-between gap-3 no-print">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">📱</span>
+              <div>
+                <div className="text-xs font-bold text-emerald-900">
+                  Instant WhatsApp Order Receipt &amp; Rider Tracking
+                </div>
+                <div className="text-[11px] text-emerald-700">
+                  Tap to save or share your complete order receipt on WhatsApp.
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={handleWhatsAppShare}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition-all hover:scale-[1.02] shrink-0"
+            >
+              <span>Open on WhatsApp ↗</span>
+            </button>
+          </div>
+
           {/* Header */}
           <div className="flex flex-col sm:flex-row justify-between items-start gap-6 border-b border-slate-200 pb-8">
             <div className="flex items-center gap-3.5">
