@@ -20,7 +20,7 @@ export default function AboutPage() {
     {
       name: 'Khushi Jat',
       initials: 'KJ',
-      role: 'Chief Executive Officer',
+      role: 'CEO',
       subRole: 'Founder & Visionary',
       quote: '"Emergency preparedness is every woman’s fundamental right to dignity, speed and peace of mind."',
       isCEO: true,
@@ -38,8 +38,8 @@ export default function AboutPage() {
     {
       name: 'Mohammad Farhan Mansuri',
       initials: 'FM',
-      role: 'Marketing Manager',
-      subRole: 'Brand & Community',
+      role: 'CMO',
+      subRole: 'Chief Marketing Officer',
       quote: '"Normalizing period dialogue across every Indian college campus, hostel and workplace."',
       isCEO: false,
       color: 'rose',
@@ -49,15 +49,15 @@ export default function AboutPage() {
       pillBg: 'bg-pink-50 text-[#9d174d] border-pink-200 font-extrabold',
       cardBg: 'bg-gradient-to-b from-[#fff0f5] via-white to-[#fff8fa]',
       cardBorder: 'border-2 border-pink-200/90 hover:border-rose/60 shadow-soft hover:shadow-lift',
-      footerLeft: 'Campus Outreach',
-      footerRight: 'Brand Growth',
+      footerLeft: 'Brand Strategy',
+      footerRight: 'CMO · Marketing',
       icon: Sparkles
     },
     {
       name: 'Anushka Khandelwal',
       initials: 'AK',
-      role: 'Finance Manager',
-      subRole: 'Capital & Unit Economics',
+      role: 'CFO',
+      subRole: 'Chief Financial Officer',
       quote: '"Keeping life-saving menstrual emergency kits radically affordable starting at ₹49."',
       isCEO: false,
       color: 'green',
@@ -68,14 +68,14 @@ export default function AboutPage() {
       cardBg: 'bg-gradient-to-b from-[#f0fdf4] via-white to-[#f7fef9]',
       cardBorder: 'border-2 border-emerald-200/90 hover:border-emerald-500/60 shadow-soft hover:shadow-lift',
       footerLeft: 'Unit Economics',
-      footerRight: '₹49 Price Guard',
+      footerRight: 'CFO · Finance',
       icon: TrendingUp
     },
     {
       name: 'Sachin Gangbhoj',
       initials: 'SG',
-      role: 'Sales Manager',
-      subRole: 'Hyperlocal Logistics',
+      role: 'COO',
+      subRole: 'Chief Operating Officer',
       quote: '"Expanding our 10-minute dark store hyper-local network to every corner of Central India."',
       isCEO: false,
       color: 'orange',
@@ -86,7 +86,7 @@ export default function AboutPage() {
       cardBg: 'bg-gradient-to-b from-[#fffbeb] via-white to-[#fffdf5]',
       cardBorder: 'border-2 border-amber-200/90 hover:border-orange-500/60 shadow-soft hover:shadow-lift',
       footerLeft: 'Dark Store Ops',
-      footerRight: '10-Min Dispatch',
+      footerRight: 'COO · Operations',
       icon: Zap
     }
   ];
@@ -351,6 +351,11 @@ export default function AboutPage() {
                       <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] uppercase tracking-wider border ${member.pillBg}`}>
                         {member.role}
                       </span>
+                      {member.subRole && (
+                        <span className="text-[11px] text-slate-500 font-medium">
+                          {member.subRole}
+                        </span>
+                      )}
                     </div>
                   </div>
 
