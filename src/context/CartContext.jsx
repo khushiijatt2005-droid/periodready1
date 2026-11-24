@@ -6,6 +6,7 @@ const CartContext = createContext();
 const CART_STORAGE_KEY = 'periodready_cart_v1';
 const ADDRESS_STORAGE_KEY = 'periodready_last_address_v1';
 const ZONE_STORAGE_KEY = 'periodready_delivery_zone_v1';
+const COUPON_STORAGE_KEY = 'periodready_coupon_v1';
 
 export const INDORE_DELIVERY_ZONES = [
   { id: 'vijay_nagar', name: 'Vijay Nagar / Scheme 54 / LIG (HQ Hub)', fee: 15, time: '~10 Mins' },
@@ -37,6 +38,52 @@ export function CartProvider({ children }) {
   });
   const [recentOrder, setRecentOrder] = useState(null);
   const [isInvoiceOpen, setIsInvoiceOpen] = useState(false);
+
+  // 20% OFF First Order Coupon System (TRYNEW20)
+  const [couponCode, setCouponCode] = useState(() => {
+    return localStorage.getItem(COUPON_STORAGE_KEY) || '';
+  });
+  const [couponDiscountPercent, setCouponDiscountPercent] = useState(() => {
+    return (localStorage.getItem(COUPON_STORAGE_KEY) || '').toUpperCase() === 'TRYNEW20' ? 20 : 0;
+  });
+  const [couponError, setCouponError] = useState('');
+  const [couponSuccess, setCouponSuccess] = useState(() => {
+    return (localStorage.getItem(COUPON_STORAGE_KEY) || '').toUpperCase() === 'TRYNEW20' ? 'Coupon TRYNEW20 Applied! 20% OFF' : '';
+  });
+  const [isPromoPopupOpen, setIsPromoPopupOpen] = useState(false);
+
+  const applyCoupon = (code) => {
+    const clean = (code || '').trim().toUpperCase();
+    if (!clean) {
+      setCouponError('Please enter a coupon code.');
+      setCouponSuccess('');
+      return false;
+    }
+    if (clean === 'TRYNEW20') {
+      setCouponCode('TRYNEW20');
+      setCouponDiscountPercent(20);
+      setCouponError('');
+      setCouponSuccess('Coupon TRYNEW20 Applied! 20% OFF');
+      try {
+        localStorage.setItem(COUPON_STORAGE_KEY, 'TRYNEW20');
+      } catch (e) {}
+      return true;
+    } else {
+      setCouponError('Invalid code. Use TRYNEW20 for 20% OFF.');
+      setCouponSuccess('');
+      return false;
+    }
+  };
+
+  const removeCoupon = () => {
+    setCouponCode('');
+    setCouponDiscountPercent(0);
+    setCouponError('');
+    setCouponSuccess('');
+    try {
+      localStorage.removeItem(COUPON_STORAGE_KEY);
+    } catch (e) {}
+  };
 
   useEffect(() => {
     try {
@@ -161,15 +208,28 @@ export function CartProvider({ children }) {
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   
+  const discountAmount = couponDiscountPercent > 0 
+    ? Math.round((subtotal * couponDiscountPercent) / 100) 
+    : 0;
+
   const currentZone = INDORE_DELIVERY_ZONES.find(z => z.id === selectedZone) || INDORE_DELIVERY_ZONES[0];
   const deliveryFee = items.length > 0 ? currentZone.fee : 0;
-  const total = subtotal + deliveryFee;
+  const total = Math.max(0, subtotal - discountAmount + deliveryFee);
 
   return (
     <CartContext.Provider value={{
       items,
       itemCount,
       subtotal,
+      discountAmount,
+      couponCode,
+      couponDiscountPercent,
+      couponError,
+      couponSuccess,
+      applyCoupon,
+      removeCoupon,
+      isPromoPopupOpen,
+      setIsPromoPopupOpen,
       deliveryFee,
       total,
       selectedZone,

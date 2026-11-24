@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Trash2, Plus, Minus, ArrowRight, ShieldCheck, MapPin, CreditCard, Banknote, Sparkles, User, Phone, Navigation } from 'lucide-react';
+import { X, Trash2, Plus, Minus, ArrowRight, ShieldCheck, MapPin, CreditCard, Banknote, Sparkles, User, Phone, Navigation, Tag, Check } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -11,6 +11,13 @@ export default function CartDrawer() {
     items, 
     itemCount, 
     subtotal,
+    discountAmount,
+    couponCode,
+    couponDiscountPercent,
+    couponError,
+    couponSuccess,
+    applyCoupon,
+    removeCoupon,
     deliveryFee,
     total, 
     selectedZone,
@@ -35,6 +42,7 @@ export default function CartDrawer() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [guestName, setGuestName] = useState('');
   const [guestPhone, setGuestPhone] = useState('');
+  const [inputCoupon, setInputCoupon] = useState('');
   const [addressError, setAddressError] = useState('');
   const [contactError, setContactError] = useState('');
 
@@ -99,6 +107,8 @@ export default function CartDrawer() {
         delivery_zone: currentZone?.name || 'Indore',
         delivery_fee: deliveryFee,
         subtotal: subtotal,
+        discount: discountAmount,
+        coupon_code: couponCode || null,
         items: items,
         total: total,
         payment_method: method === 'online' ? 'online' : 'cod',
@@ -357,6 +367,78 @@ export default function CartDrawer() {
                     </div>
                   </div>
 
+                  {/* Promo / Coupon Code Section */}
+                  <div className="pt-2">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5 flex items-center justify-between">
+                      <span className="flex items-center gap-1.5">
+                        <Tag className="w-3.5 h-3.5 text-rose" />
+                        Have a Promo Code?
+                      </span>
+                      {!couponCode && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            applyCoupon('TRYNEW20');
+                          }}
+                          className="text-[10px] text-rose font-bold hover:underline"
+                        >
+                          Use TRYNEW20 (20% OFF)
+                        </button>
+                      )}
+                    </label>
+
+                    {couponCode ? (
+                      <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+                          <div>
+                            <div className="text-xs font-bold text-emerald-900">
+                              Code <span className="font-mono">{couponCode}</span> Applied!
+                            </div>
+                            <div className="text-[11px] text-emerald-700">
+                              20% OFF (-₹{discountAmount}) saved on your order
+                            </div>
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={removeCoupon}
+                          className="text-xs font-bold text-red-600 hover:text-red-800 p-1 rounded"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="space-y-1.5">
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            value={inputCoupon}
+                            onChange={(e) => setInputCoupon(e.target.value.toUpperCase())}
+                            placeholder="e.g. TRYNEW20"
+                            className="flex-1 px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono font-bold uppercase tracking-wider bg-white focus:outline-none focus:ring-2 focus:ring-indigo/20 focus:border-indigo"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              applyCoupon(inputCoupon);
+                              setInputCoupon('');
+                            }}
+                            className="px-4 py-2 rounded-xl bg-indigo hover:bg-indigo-dark text-white font-bold text-xs shadow-xs transition-colors"
+                          >
+                            Apply
+                          </button>
+                        </div>
+                        {couponError && (
+                          <p className="text-[11px] text-red-500 font-medium">{couponError}</p>
+                        )}
+                        {couponSuccess && (
+                          <p className="text-[11px] text-emerald-600 font-medium">{couponSuccess}</p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
                   {/* Discreet Packaging Note */}
                   <div className="p-3 rounded-xl bg-lavender/60 border border-lavender-border flex items-center gap-2 text-xs text-indigo">
                     <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
@@ -374,6 +456,17 @@ export default function CartDrawer() {
                     <span>Kits Subtotal:</span>
                     <span className="font-semibold text-slate-900">₹{subtotal}</span>
                   </div>
+
+                  {discountAmount > 0 && (
+                    <div className="flex justify-between text-emerald-700 font-semibold bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
+                      <span className="flex items-center gap-1">
+                        <Tag className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>First Order Discount ({couponCode}):</span>
+                      </span>
+                      <span>-₹{discountAmount}</span>
+                    </div>
+                  )}
+
                   <div className="flex justify-between text-slate-600">
                     <span className="flex items-center gap-1">
                       <span>Rider Delivery:</span>
@@ -381,9 +474,17 @@ export default function CartDrawer() {
                     </span>
                     <span className="font-semibold text-indigo">₹{deliveryFee}</span>
                   </div>
+
                   <div className="flex justify-between text-base font-bold text-indigo pt-2 border-t border-slate-200">
                     <span>Total Amount:</span>
-                    <span>₹{total}</span>
+                    <div className="text-right">
+                      <span>₹{total}</span>
+                      {discountAmount > 0 && (
+                        <div className="text-[10px] text-emerald-600 font-semibold">
+                          You saved ₹{discountAmount} (20% OFF)
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
 

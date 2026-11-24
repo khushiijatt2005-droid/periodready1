@@ -939,6 +939,11 @@ export default function AdminPage() {
                     {/* Total & Payment */}
                     <td className="py-3 px-2">
                       <div className="font-bold text-slate-900">₹{ord.total}</div>
+                      {ord.discount > 0 && (
+                        <div className="text-[10px] text-emerald-700 font-semibold">
+                          (Saved ₹{ord.discount} · {ord.coupon_code || 'TRYNEW20'})
+                        </div>
+                      )}
                       {ord.delivery_fee ? (
                         <div className="text-[10px] text-slate-500 font-medium">
                           (incl. ₹{ord.delivery_fee} delivery)

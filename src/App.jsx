@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import CartDrawer from './components/CartDrawer';
 import AuthModal from './components/AuthModal';
 import PrintableInvoice from './components/PrintableInvoice';
+import PromoPopup from './components/PromoPopup';
 import { useCart } from './context/CartContext';
 
 // Pages
@@ -58,6 +59,7 @@ export default function App() {
       <Footer />
 
       {/* Global Interactive Drawers & Modals */}
+      <PromoPopup />
       <CartDrawer />
       <AuthModal />
 

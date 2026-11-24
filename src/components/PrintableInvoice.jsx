@@ -191,8 +191,14 @@ export default function PrintableInvoice({ order, isOpen, onClose }) {
             <div className="w-full max-w-xs space-y-1.5 text-xs sm:text-sm">
               <div className="flex justify-between text-slate-600">
                 <span>Items Subtotal:</span>
-                <span>₹{order.subtotal || (order.total - (order.delivery_fee || 0))}</span>
+                <span>₹{order.subtotal || order.total}</span>
               </div>
+              {order.discount > 0 && (
+                <div className="flex justify-between text-emerald-700 font-semibold">
+                  <span>First Order Discount ({order.coupon_code || 'TRYNEW20'}):</span>
+                  <span>-₹{order.discount}</span>
+                </div>
+              )}
               <div className="flex justify-between text-slate-600">
                 <span>Rider Delivery:</span>
                 <span className="font-semibold text-indigo">
