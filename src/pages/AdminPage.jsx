@@ -26,7 +26,8 @@ import {
   Sparkles,
   Flame,
   RefreshCw,
-  Package
+  Package,
+  Zap
 } from 'lucide-react';
 import { 
   dbGetOrders, 
@@ -138,7 +139,7 @@ export default function AdminPage() {
   };
 
   const handleResetCampaign = async () => {
-    if (window.confirm('Reset & load fresh 1st Week (50 sales) + 2nd Week Diwali Campaign (200 sales)?')) {
+    if (window.confirm('Reset & load fresh 4 Weeks data (W1: 50, W2: 200, W3: 75, W4: 90 = 415 sales)?')) {
       dbResetCampaignData();
       await loadData();
     }
@@ -167,10 +168,14 @@ export default function AdminPage() {
       // Campaign / Live filter
       if (campaignFilter === 'live') {
         if (!o.is_live) return false;
+      } else if (campaignFilter === 'week4') {
+        if (!o.campaign?.includes('Week 4') && !o.via?.includes('Week 4')) return false;
+      } else if (campaignFilter === 'week3') {
+        if (!o.campaign?.includes('Week 3') && !o.via?.includes('Week 3')) return false;
       } else if (campaignFilter === 'diwali') {
         if (!o.campaign?.includes('Diwali') && !o.via?.includes('Diwali')) return false;
       } else if (campaignFilter === 'week1') {
-        if (o.campaign?.includes('Diwali') || o.via?.includes('Diwali') || o.is_live) return false;
+        if (!o.campaign?.includes('Week 1') && !o.via?.includes('Week 1') && !o.campaign?.includes('Baseline')) return false;
       }
 
       // Status filter
@@ -193,12 +198,12 @@ export default function AdminPage() {
     });
   }, [orders, dateRange, campaignFilter, statusFilter, searchQuery]);
 
-  // Separate Diwali Campaign & Week 1 Summary Stats
-  const diwaliStats = useMemo(() => {
-    const diwaliOrders = orders.filter(o => (o.campaign?.includes('Diwali') || o.via?.includes('Diwali')) && o.status !== 'Cancelled');
-    const revenue = diwaliOrders.reduce((sum, o) => sum + Number(o.total || 0), 0);
+  // Helper to compute revenue and profit for any week
+  const calculateWeekStats = (filterFn) => {
+    const weekOrders = orders.filter(o => filterFn(o) && o.status !== 'Cancelled');
+    const revenue = weekOrders.reduce((sum, o) => sum + Number(o.total || 0), 0);
     let cost = 0;
-    diwaliOrders.forEach(ord => {
+    weekOrders.forEach(ord => {
       (ord.items || []).forEach(it => {
         const matchingCost = productCosts.find(c => c.product_id === it.id);
         const unitCost = matchingCost ? Number(matchingCost.cost_per_unit) : (it.price * 0.4);
@@ -207,32 +212,17 @@ export default function AdminPage() {
     });
     const profit = Math.max(0, revenue - cost);
     return {
-      count: diwaliOrders.length,
+      count: weekOrders.length,
       revenue,
       profit: Math.round(profit),
       margin: revenue > 0 ? ((profit / revenue) * 100).toFixed(1) : '0'
     };
-  }, [orders, productCosts]);
+  };
 
-  const week1Stats = useMemo(() => {
-    const w1Orders = orders.filter(o => !o.campaign?.includes('Diwali') && !o.via?.includes('Diwali') && o.status !== 'Cancelled');
-    const revenue = w1Orders.reduce((sum, o) => sum + Number(o.total || 0), 0);
-    let cost = 0;
-    w1Orders.forEach(ord => {
-      (ord.items || []).forEach(it => {
-        const matchingCost = productCosts.find(c => c.product_id === it.id);
-        const unitCost = matchingCost ? Number(matchingCost.cost_per_unit) : (it.price * 0.4);
-        cost += unitCost * (it.quantity || 1);
-      });
-    });
-    const profit = Math.max(0, revenue - cost);
-    return {
-      count: w1Orders.length,
-      revenue,
-      profit: Math.round(profit),
-      margin: revenue > 0 ? ((profit / revenue) * 100).toFixed(1) : '0'
-    };
-  }, [orders, productCosts]);
+  const week1Stats = useMemo(() => calculateWeekStats(o => (o.campaign?.includes('Week 1') || o.via?.includes('Week 1') || o.campaign?.includes('Baseline')) && !o.is_live), [orders, productCosts]);
+  const diwaliStats = useMemo(() => calculateWeekStats(o => (o.campaign?.includes('Diwali') || o.via?.includes('Diwali')) && !o.is_live), [orders, productCosts]);
+  const week3Stats = useMemo(() => calculateWeekStats(o => (o.campaign?.includes('Week 3') || o.via?.includes('Week 3')) && !o.is_live), [orders, productCosts]);
+  const week4Stats = useMemo(() => calculateWeekStats(o => (o.campaign?.includes('Week 4') || o.via?.includes('Week 4')) && !o.is_live), [orders, productCosts]);
 
   const liveOrdersCount = useMemo(() => orders.filter(o => o.is_live).length, [orders]);
 
@@ -496,11 +486,11 @@ export default function AdminPage() {
           </button>
           <button
             onClick={handleResetCampaign}
-            title="Reload 1st Week Baseline + 2nd Week Diwali Campaign data"
+            title="Reload 4 Weeks Campaign Data (W1: 50, W2: 200, W3: 75, W4: 90)"
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-semibold border border-amber-200 shadow-xs transition-colors"
           >
             <RefreshCw className="w-3.5 h-3.5 text-amber-600" />
-            <span>Reload 200 Diwali Sales</span>
+            <span>Reload 4 Weeks (415 Sales)</span>
           </button>
 
           <button
@@ -521,38 +511,43 @@ export default function AdminPage() {
         </div>
       </div>
 
-      {/* 2nd Week Diwali Campaign & 1st Week Analytics Spotlight Banner */}
+      {/* 4-Week Milestone & Campaign Analytics Spotlight Banner */}
       <div className="rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-amber-500 via-rose to-indigo text-white shadow-soft relative overflow-hidden">
         <div className="absolute right-0 top-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
         <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div className="space-y-2 max-w-2xl">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-bold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5 text-amber-200" />
-              <span>Diwali Special Campaign 2026 · 200 Sales Milestone Achieved!</span>
+              <span>Month-1 4-Week Scale Performance · 415 Total Sales Delivered!</span>
             </div>
             <h2 className="font-serif font-bold text-2xl sm:text-3xl text-white tracking-tight">
-              Indore Diwali Gifting &amp; Emergency Surge
+              Indore 4-Week Rapid Scale &amp; Emergency Surge
             </h2>
             <p className="text-xs sm:text-sm text-white/90 leading-relaxed">
-              2nd Week Diwali Festive Campaign achieved exactly <strong>200 orders</strong> across Indore colleges, hostels, and PGs. The Over-all Master Combo Box (₹399) was the #1 gifting bestseller alongside the Cozy Knit Hot Water Bag (₹349) and Week 1 emergency rescues!
+              Complete growth trajectory: <strong>Week 1 (50 sales)</strong> launch baseline, <strong>Week 2 (200 sales)</strong> Diwali festival peak, <strong>Week 3 (75 sales)</strong> campus &amp; hostel expansion, and <strong>Week 4 (90 sales)</strong> emergency logistics scale across Indore!
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 shrink-0 w-full lg:w-auto">
-            <div className="bg-white/15 backdrop-blur-md p-3.5 rounded-2xl border border-white/20 text-center">
-              <span className="text-[10px] uppercase font-bold text-amber-200 tracking-wider">Diwali Sales</span>
-              <div className="font-serif font-bold text-2xl text-white">200</div>
-              <span className="text-[10px] text-white/80">Target 100% Met</span>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 shrink-0 w-full lg:w-auto">
+            <div className="bg-white/15 backdrop-blur-md p-3 rounded-2xl border border-white/20 text-center">
+              <span className="text-[10px] uppercase font-bold text-amber-200 tracking-wider">Week 1</span>
+              <div className="font-serif font-bold text-xl text-white">50</div>
+              <span className="text-[10px] text-emerald-200 font-semibold">₹{week1Stats.revenue}</span>
             </div>
-            <div className="bg-white/15 backdrop-blur-md p-3.5 rounded-2xl border border-white/20 text-center">
-              <span className="text-[10px] uppercase font-bold text-amber-200 tracking-wider">Diwali Revenue</span>
-              <div className="font-serif font-bold text-2xl text-white">₹{diwaliStats.revenue}</div>
-              <span className="text-[10px] text-emerald-200 font-semibold">Profit: ₹{diwaliStats.profit}</span>
+            <div className="bg-white/15 backdrop-blur-md p-3 rounded-2xl border border-white/20 text-center">
+              <span className="text-[10px] uppercase font-bold text-amber-200 tracking-wider">Week 2 (Diwali)</span>
+              <div className="font-serif font-bold text-xl text-white">200</div>
+              <span className="text-[10px] text-emerald-200 font-semibold">₹{diwaliStats.revenue}</span>
             </div>
-            <div className="col-span-2 sm:col-span-1 bg-white/15 backdrop-blur-md p-3.5 rounded-2xl border border-white/20 text-center">
-              <span className="text-[10px] uppercase font-bold text-amber-200 tracking-wider">Week 1 Baseline</span>
-              <div className="font-serif font-bold text-2xl text-white">₹{week1Stats.revenue}</div>
-              <span className="text-[10px] text-emerald-200 font-semibold">Profit: ₹{week1Stats.profit} ({week1Stats.count} sales)</span>
+            <div className="bg-white/15 backdrop-blur-md p-3 rounded-2xl border border-white/20 text-center">
+              <span className="text-[10px] uppercase font-bold text-amber-200 tracking-wider">Week 3</span>
+              <div className="font-serif font-bold text-xl text-white">75</div>
+              <span className="text-[10px] text-emerald-200 font-semibold">₹{week3Stats.revenue}</span>
+            </div>
+            <div className="bg-white/15 backdrop-blur-md p-3 rounded-2xl border border-white/20 text-center">
+              <span className="text-[10px] uppercase font-bold text-amber-200 tracking-wider">Week 4</span>
+              <div className="font-serif font-bold text-xl text-white">90</div>
+              <span className="text-[10px] text-emerald-200 font-semibold">₹{week4Stats.revenue}</span>
             </div>
           </div>
         </div>
@@ -570,7 +565,9 @@ export default function AdminPage() {
           {[
             { id: 'all', label: `All Orders (${orders.length})` },
             { id: 'live', label: `🔴 Live Orders (${liveOrdersCount})`, isLive: true },
-            { id: 'diwali', label: `Diwali Campaign (${diwaliStats.count} Sales)`, icon: Sparkles },
+            { id: 'week4', label: `Week 4 (${week4Stats.count} Sales)`, icon: TrendingUp },
+            { id: 'week3', label: `Week 3 (${week3Stats.count} Sales)`, icon: Zap },
+            { id: 'diwali', label: `Week 2 Diwali (${diwaliStats.count} Sales)`, icon: Sparkles },
             { id: 'week1', label: `Week 1 (${week1Stats.count} Sales)` },
           ].map((c) => (
             <button
@@ -884,13 +881,21 @@ export default function AdminPage() {
                         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-xs mt-1 animate-pulse">
                           🟢 LIVE ORDER
                         </span>
+                      ) : (ord.campaign?.includes('Week 4') || ord.via?.includes('Week 4')) ? (
+                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-purple-100 text-purple-800 border border-purple-200 mt-1">
+                          <TrendingUp className="w-2.5 h-2.5 text-purple-600" /> Week 4 (90)
+                        </span>
+                      ) : (ord.campaign?.includes('Week 3') || ord.via?.includes('Week 3')) ? (
+                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-blue-100 text-blue-800 border border-blue-200 mt-1">
+                          <Zap className="w-2.5 h-2.5 text-blue-600" /> Week 3 (75)
+                        </span>
                       ) : (ord.campaign?.includes('Diwali') || ord.via?.includes('Diwali')) ? (
                         <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-amber-100 text-amber-800 border border-amber-200 mt-1">
-                          <Sparkles className="w-2.5 h-2.5 text-amber-600" /> Diwali Campaign
+                          <Sparkles className="w-2.5 h-2.5 text-amber-600" /> Week 2 Diwali (200)
                         </span>
                       ) : (
                         <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-indigo-50 text-indigo-700 border border-indigo-100 mt-1">
-                          Week 1 Baseline
+                          Week 1 Baseline (50)
                         </span>
                       )}
                     </td>

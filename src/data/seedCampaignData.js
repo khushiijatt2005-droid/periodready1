@@ -1,7 +1,9 @@
 // Seed data generator for PeriodReady
-// Generates:
-// 1. Week 1 baseline sales: 50 orders (steady revenue & profit)
-// 2. Week 2 Diwali Campaign: EXACTLY 200 sales (festive surge, gifting combo boxes & hot water bags)
+// Generates 4 Complete Weekly Sales Milestones (Total 415 Sales):
+// 1. Week 1 baseline sales: 50 orders (steady launch baseline)
+// 2. Week 2 Diwali Campaign: EXACTLY 200 sales (festive gifting surge)
+// 3. Week 3 Expansion: EXACTLY 75 sales (campus PG adoption)
+// 4. Week 4 Active Growth: EXACTLY 90 sales (10-min emergency rapid scale)
 
 export function generateSeedOrders() {
   const products = [
@@ -41,17 +43,16 @@ export function generateSeedOrders() {
   const customersMap = new Map();
 
   const now = new Date();
+  let orderCounter = 1001;
 
   // ----------------------------------------------------
-  // WEEK 1: Steady baseline sales (Days -13 to -7)
-  // 50 total sales across 7 days (~7 orders/day)
+  // WEEK 1: Steady baseline sales (Days -27 to -21)
+  // EXACTLY 50 sales across 7 days
   // ----------------------------------------------------
   const week1DailyCounts = [6, 8, 5, 9, 7, 8, 7]; // sum = 50
 
-  let orderCounter = 1001;
-
-  for (let dayOffset = 13; dayOffset >= 7; dayOffset--) {
-    const dayIdx = 13 - dayOffset;
+  for (let dayOffset = 27; dayOffset >= 21; dayOffset--) {
+    const dayIdx = 27 - dayOffset;
     const count = week1DailyCounts[dayIdx];
 
     const targetDate = new Date(now);
@@ -60,11 +61,9 @@ export function generateSeedOrders() {
     for (let i = 0; i < count; i++) {
       const cust = customerPool[(orderCounter + i) % customerPool.length];
       
-      // Randomize hour between 9 AM and 10 PM
       const orderDate = new Date(targetDate);
       orderDate.setHours(9 + ((i * 2) % 13), (i * 17) % 60, (i * 23) % 60);
 
-      // Baseline product mix
       const randProd = (i % 3 === 0) 
         ? products[0] // Emergency Kit
         : (i % 3 === 1) 
@@ -84,8 +83,7 @@ export function generateSeedOrders() {
         }
       ];
 
-      const isPaidOnline = (i % 4 !== 0); // 75% online, 25% COD
-      const isDelivered = true; // All week 1 orders are fulfilled
+      const isPaidOnline = (i % 4 !== 0);
 
       const orderId = `PR-W1-${orderCounter++}`;
       const orderRecord = {
@@ -101,9 +99,9 @@ export function generateSeedOrders() {
         status: 'Delivered',
         payment_method: isPaidOnline ? 'online' : 'cod',
         paid: true,
-        via: 'PeriodReady 10-Min Web',
-        reference: isPaidOnline ? `UPI-IND-${Math.floor(100000 + Math.random() * 900000)}` : null,
-        campaign: 'Regular Baseline',
+        via: 'Week 1 Baseline',
+        reference: isPaidOnline ? `UPI-W1-${Math.floor(100000 + Math.random() * 900000)}` : null,
+        campaign: 'Week 1 Baseline',
         created_at: orderDate.toISOString(),
         updated_at: orderDate.toISOString()
       };
@@ -122,13 +120,13 @@ export function generateSeedOrders() {
   }
 
   // ----------------------------------------------------
-  // WEEK 2: DIWALI CAMPAIGN (200 Sales) (Days -6 to 0)
-  // High volume: Gifting Master Combos, Hot Water Bags, Regular Kits
+  // WEEK 2: DIWALI CAMPAIGN (Days -20 to -14)
+  // EXACTLY 200 Sales (Gifting Master Combos & Hot Water Bags)
   // ----------------------------------------------------
-  const diwaliDailyCounts = [20, 28, 34, 42, 30, 26, 20]; // EXACTLY 200 sales!
+  const diwaliDailyCounts = [20, 28, 34, 42, 30, 26, 20]; // sum = 200
 
-  for (let dayOffset = 6; dayOffset >= 0; dayOffset--) {
-    const dayIdx = 6 - dayOffset;
+  for (let dayOffset = 20; dayOffset >= 14; dayOffset--) {
+    const dayIdx = 20 - dayOffset;
     const count = diwaliDailyCounts[dayIdx];
 
     const targetDate = new Date(now);
@@ -140,11 +138,10 @@ export function generateSeedOrders() {
       const orderDate = new Date(targetDate);
       orderDate.setHours(8 + ((i * 3) % 15), (i * 11) % 60, (i * 37) % 60);
 
-      // Festive product mix: 40% Master Combo (gifting), 25% Hot Water Bag, 20% Regular Kit, 15% Emergency
       let chosenProduct;
       const r = (i * 7) % 100;
       if (r < 40) {
-        chosenProduct = products[3]; // Master Combo Box (₹399) - Diwali Gifting Favorite!
+        chosenProduct = products[3]; // Master Combo Box (₹399)
       } else if (r < 65) {
         chosenProduct = products[4]; // Cozy Knit Hot Water Bag (₹349)
       } else if (r < 85) {
@@ -166,7 +163,6 @@ export function generateSeedOrders() {
         }
       ];
 
-      // Occasional multi-item gifting combo
       if (i % 7 === 0 && chosenProduct.id !== 'master-combo') {
         items.push({
           id: products[0].id,
@@ -177,32 +173,212 @@ export function generateSeedOrders() {
       }
 
       const total = items.reduce((sum, it) => sum + (it.price * it.quantity), 0);
+      const isOnline = (i % 5 !== 0);
 
-      // Status distribution based on how recent the order is:
-      // Days -6 to -3: 100% Delivered
-      // Days -2 to -1: 85% Delivered, 15% Shipped
-      // Day 0 (today): 50% Delivered, 35% Shipped, 15% Placed
+      const orderId = `PR-DWL-${orderCounter++}`;
+      const orderRecord = {
+        id: orderId,
+        customer_id: `CUST-${cust.email.split('@')[0]}`,
+        customer: cust.name,
+        name: cust.name,
+        phone: cust.phone,
+        email: cust.email,
+        address: `${cust.area}, Indore 452001`,
+        items,
+        total,
+        status: 'Delivered',
+        payment_method: isOnline ? 'online' : 'cod',
+        paid: true,
+        via: 'Diwali Campaign 2026',
+        reference: isOnline ? `DIWALI-UPI-${Math.floor(200000 + Math.random() * 800000)}` : null,
+        campaign: 'Diwali Campaign 2026',
+        created_at: orderDate.toISOString(),
+        updated_at: orderDate.toISOString()
+      };
+
+      orders.push(orderRecord);
+
+      customersMap.set(cust.email, {
+        id: `CUST-${cust.email.split('@')[0]}`,
+        name: cust.name,
+        email: cust.email,
+        phone: cust.phone,
+        created_at: customersMap.get(cust.email)?.created_at || orderDate.toISOString(),
+        last_order_at: orderDate.toISOString()
+      });
+    }
+  }
+
+  // ----------------------------------------------------
+  // WEEK 3: Campus & PG Expansion (Days -13 to -7)
+  // EXACTLY 75 Sales
+  // ----------------------------------------------------
+  const week3DailyCounts = [10, 11, 12, 11, 10, 11, 10]; // sum = 75
+
+  for (let dayOffset = 13; dayOffset >= 7; dayOffset--) {
+    const dayIdx = 13 - dayOffset;
+    const count = week3DailyCounts[dayIdx];
+
+    const targetDate = new Date(now);
+    targetDate.setDate(now.getDate() - dayOffset);
+
+    for (let i = 0; i < count; i++) {
+      const cust = customerPool[(orderCounter + i) % customerPool.length];
+      
+      const orderDate = new Date(targetDate);
+      orderDate.setHours(9 + ((i * 3) % 13), (i * 19) % 60, (i * 31) % 60);
+
+      // Balanced mix: Regular kits (₹179), Emergency (₹49), Travel (₹249), Hot water bag (₹349)
+      const r = (i * 11) % 100;
+      let chosenProduct;
+      if (r < 35) {
+        chosenProduct = products[1]; // Regular Kit (₹179)
+      } else if (r < 65) {
+        chosenProduct = products[0]; // Emergency Kit (₹49)
+      } else if (r < 85) {
+        chosenProduct = products[2]; // Travel Kit (₹249)
+      } else {
+        chosenProduct = products[4]; // Hot Water Bag (₹349)
+      }
+
+      const isBag = chosenProduct.id === 'hot-water-bag';
+      const bagColor = isBag ? bagColors[(i + dayIdx) % bagColors.length] : null;
+
+      const items = [
+        {
+          id: chosenProduct.id,
+          name: isBag ? `${chosenProduct.name} (${bagColor})` : chosenProduct.name,
+          price: chosenProduct.price,
+          quantity: 1,
+          color: bagColor
+        }
+      ];
+
+      // Occasional add-on
+      if (i % 6 === 0 && chosenProduct.id !== 'emergency-kit') {
+        items.push({
+          id: products[0].id,
+          name: products[0].name,
+          price: products[0].price,
+          quantity: 1
+        });
+      }
+
+      const total = items.reduce((sum, it) => sum + (it.price * it.quantity), 0);
+      const isOnline = (i % 4 !== 0);
+
+      const orderId = `PR-W3-${orderCounter++}`;
+      const orderRecord = {
+        id: orderId,
+        customer_id: `CUST-${cust.email.split('@')[0]}`,
+        customer: cust.name,
+        name: cust.name,
+        phone: cust.phone,
+        email: cust.email,
+        address: `${cust.area}, Indore 452001`,
+        items,
+        total,
+        status: 'Delivered',
+        payment_method: isOnline ? 'online' : 'cod',
+        paid: true,
+        via: 'Week 3 Expansion',
+        reference: isOnline ? `UPI-W3-${Math.floor(300000 + Math.random() * 700000)}` : null,
+        campaign: 'Week 3 Campaign',
+        created_at: orderDate.toISOString(),
+        updated_at: orderDate.toISOString()
+      };
+
+      orders.push(orderRecord);
+
+      customersMap.set(cust.email, {
+        id: `CUST-${cust.email.split('@')[0]}`,
+        name: cust.name,
+        email: cust.email,
+        phone: cust.phone,
+        created_at: customersMap.get(cust.email)?.created_at || orderDate.toISOString(),
+        last_order_at: orderDate.toISOString()
+      });
+    }
+  }
+
+  // ----------------------------------------------------
+  // WEEK 4: Rapid Growth & Emergency Scale (Days -6 to 0)
+  // EXACTLY 90 Sales
+  // ----------------------------------------------------
+  const week4DailyCounts = [12, 13, 14, 15, 12, 12, 12]; // sum = 90
+
+  for (let dayOffset = 6; dayOffset >= 0; dayOffset--) {
+    const dayIdx = 6 - dayOffset;
+    const count = week4DailyCounts[dayIdx];
+
+    const targetDate = new Date(now);
+    targetDate.setDate(now.getDate() - dayOffset);
+
+    for (let i = 0; i < count; i++) {
+      const cust = customerPool[(orderCounter + i) % customerPool.length];
+      
+      const orderDate = new Date(targetDate);
+      orderDate.setHours(8 + ((i * 2) % 15), (i * 13) % 60, (i * 41) % 60);
+
+      // High volume mix: Master combo, regular kit, emergency kits, travel kits
+      const r = (i * 13) % 100;
+      let chosenProduct;
+      if (r < 30) {
+        chosenProduct = products[0]; // Emergency Kit (₹49)
+      } else if (r < 60) {
+        chosenProduct = products[1]; // Regular Kit (₹179)
+      } else if (r < 80) {
+        chosenProduct = products[3]; // Master Combo (₹399)
+      } else {
+        chosenProduct = products[4]; // Hot Water Bag (₹349)
+      }
+
+      const isBag = chosenProduct.id === 'hot-water-bag';
+      const bagColor = isBag ? bagColors[(i + dayIdx) % bagColors.length] : null;
+
+      const items = [
+        {
+          id: chosenProduct.id,
+          name: isBag ? `${chosenProduct.name} (${bagColor})` : chosenProduct.name,
+          price: chosenProduct.price,
+          quantity: 1,
+          color: bagColor
+        }
+      ];
+
+      if (i % 5 === 0 && chosenProduct.id !== 'emergency-kit') {
+        items.push({
+          id: products[0].id,
+          name: products[0].name,
+          price: products[0].price,
+          quantity: 1
+        });
+      }
+
+      const total = items.reduce((sum, it) => sum + (it.price * it.quantity), 0);
+
+      // Real status distribution for current week
       let status = 'Delivered';
       let paid = true;
       if (dayOffset === 0) {
         const sr = i % 10;
         if (sr < 2) {
           status = 'Placed';
-          paid = (i % 3 !== 0);
+          paid = (i % 2 !== 0);
         } else if (sr < 5) {
           status = 'Shipped';
-          paid = (i % 4 !== 0);
+          paid = (i % 3 !== 0);
         } else {
           status = 'Delivered';
           paid = true;
         }
       } else if (dayOffset === 1) {
-        if (i % 8 === 0) status = 'Shipped';
+        if (i % 6 === 0) status = 'Shipped';
       }
 
-      const isOnline = (i % 5 !== 0); // 80% online UPI / Card for Diwali orders
+      const isOnline = (i % 4 !== 0);
 
-      const orderId = `PR-DWL-${orderCounter++}`;
+      const orderId = `PR-W4-${orderCounter++}`;
       const orderRecord = {
         id: orderId,
         customer_id: `CUST-${cust.email.split('@')[0]}`,
@@ -216,9 +392,9 @@ export function generateSeedOrders() {
         status,
         payment_method: isOnline ? 'online' : 'cod',
         paid: isOnline ? true : paid,
-        via: 'Diwali Campaign 2026',
-        reference: isOnline ? `DIWALI-UPI-${Math.floor(200000 + Math.random() * 800000)}` : null,
-        campaign: 'Diwali Campaign 2026',
+        via: 'Week 4 Growth',
+        reference: isOnline ? `UPI-W4-${Math.floor(400000 + Math.random() * 600000)}` : null,
+        campaign: 'Week 4 Campaign',
         created_at: orderDate.toISOString(),
         updated_at: orderDate.toISOString()
       };
