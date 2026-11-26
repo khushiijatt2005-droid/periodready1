@@ -139,7 +139,7 @@ export default function AdminPage() {
   };
 
   const handleResetCampaign = async () => {
-    if (window.confirm('Reset & load fresh 4 Weeks data (W1: 50, W2: 200, W3: 75, W4: 90 = 415 sales)?')) {
+    if (window.confirm('Reset & load fresh 4 Weeks data (W1: 50, Diwali: 1,000, W3: 75, W4: 90 = 1,215 sales)?')) {
       dbResetCampaignData();
       await loadData();
     }
@@ -486,11 +486,11 @@ export default function AdminPage() {
           </button>
           <button
             onClick={handleResetCampaign}
-            title="Reload 4 Weeks Campaign Data (W1: 50, W2: 200, W3: 75, W4: 90)"
+            title="Reload 4 Weeks Campaign Data (W1: 50, Diwali: 1,000, W3: 75, W4: 90)"
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-semibold border border-amber-200 shadow-xs transition-colors"
           >
             <RefreshCw className="w-3.5 h-3.5 text-amber-600" />
-            <span>Reload 4 Weeks (415 Sales)</span>
+            <span>Reload 4 Weeks (1,215 Sales)</span>
           </button>
 
           <button
@@ -518,13 +518,13 @@ export default function AdminPage() {
           <div className="space-y-2 max-w-2xl">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-bold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5 text-amber-200" />
-              <span>Month-1 4-Week Scale Performance · 415 Total Sales Delivered!</span>
+              <span>Month-1 4-Week Scale Performance · 1,215 Total Sales Delivered!</span>
             </div>
             <h2 className="font-serif font-bold text-2xl sm:text-3xl text-white tracking-tight">
               Indore 4-Week Rapid Scale &amp; Emergency Surge
             </h2>
             <p className="text-xs sm:text-sm text-white/90 leading-relaxed">
-              Complete growth trajectory: <strong>Week 1 (50 sales)</strong> launch baseline, <strong>Week 2 (200 sales)</strong> Diwali festival peak, <strong>Week 3 (75 sales)</strong> campus &amp; hostel expansion, and <strong>Week 4 (90 sales)</strong> emergency logistics scale across Indore!
+              Complete growth trajectory: <strong>Week 1 (50 sales)</strong> launch baseline, <strong>Week 2 Diwali (1,000 units sold)</strong> festive mega gifting surge, <strong>Week 3 (75 sales)</strong> campus &amp; hostel expansion, and <strong>Week 4 (90 sales)</strong> emergency logistics scale across Indore!
             </p>
           </div>
 
@@ -536,7 +536,7 @@ export default function AdminPage() {
             </div>
             <div className="bg-white/15 backdrop-blur-md p-3 rounded-2xl border border-white/20 text-center">
               <span className="text-[10px] uppercase font-bold text-amber-200 tracking-wider">Week 2 (Diwali)</span>
-              <div className="font-serif font-bold text-xl text-white">200</div>
+              <div className="font-serif font-bold text-xl text-white">1,000</div>
               <span className="text-[10px] text-emerald-200 font-semibold">₹{diwaliStats.revenue}</span>
             </div>
             <div className="bg-white/15 backdrop-blur-md p-3 rounded-2xl border border-white/20 text-center">
@@ -891,7 +891,7 @@ export default function AdminPage() {
                         </span>
                       ) : (ord.campaign?.includes('Diwali') || ord.via?.includes('Diwali')) ? (
                         <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-amber-100 text-amber-800 border border-amber-200 mt-1">
-                          <Sparkles className="w-2.5 h-2.5 text-amber-600" /> Week 2 Diwali (200)
+                          <Sparkles className="w-2.5 h-2.5 text-amber-600" /> Week 2 Diwali (1,000)
                         </span>
                       ) : (
                         <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-indigo-50 text-indigo-700 border border-indigo-100 mt-1">

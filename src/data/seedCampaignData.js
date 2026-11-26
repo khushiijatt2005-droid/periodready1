@@ -1,7 +1,7 @@
 // Seed data generator for PeriodReady
-// Generates 4 Complete Weekly Sales Milestones (Total 415 Sales):
+// Generates 4 Complete Weekly Sales Milestones (Total 1,215 Sales):
 // 1. Week 1 baseline sales: 50 orders (steady launch baseline)
-// 2. Week 2 Diwali Campaign: EXACTLY 200 sales (festive gifting surge)
+// 2. Week 2 Diwali Mega Campaign: EXACTLY 1,000 sales (festive gifting surge)
 // 3. Week 3 Expansion: EXACTLY 75 sales (campus PG adoption)
 // 4. Week 4 Active Growth: EXACTLY 90 sales (10-min emergency rapid scale)
 
@@ -36,7 +36,17 @@ export function generateSeedOrders() {
     { name: 'Deepika Chouhan', phone: '+91 99819 78906', email: 'deepika.c@gmail.com', area: 'Airport Road, Kalani Nagar, Indore' },
     { name: 'Suhani Patidar', phone: '+91 98266 89017', email: 'suhani.p@gmail.com', area: 'Ranjeet Hanuman Road, Indore' },
     { name: 'Muskan Mittal', phone: '+91 98932 90128', email: 'muskan.mittal@gmail.com', area: 'Chappan Dukan area, Indore' },
-    { name: 'Bhavna Parmar', phone: '+91 97559 01239', email: 'bhavna.parmar@gmail.com', area: 'South Tukoganj, Indore' }
+    { name: 'Bhavna Parmar', phone: '+91 97559 01239', email: 'bhavna.parmar@gmail.com', area: 'South Tukoganj, Indore' },
+    { name: 'Neelam Joshi', phone: '+91 98261 45678', email: 'neelam.j@sgsits.ac.in', area: 'SGSITS Hostel, Vallabh Nagar, Indore' },
+    { name: 'Mansi Kulkarni', phone: '+91 94254 78901', email: 'mansi.k@gmail.com', area: 'Chhatribagh, Indore' },
+    { name: 'Prachi Saxena', phone: '+91 97551 23450', email: 'prachi.s@acropolis.in', area: 'Acropolis Campus, Bypass Road, Indore' },
+    { name: 'Khushboo Jain', phone: '+91 98935 67891', email: 'khushboo.j@gmail.com', area: 'Treasure Island Mall area, MG Road, Indore' },
+    { name: 'Garima Sharma', phone: '+91 99815 89012', email: 'garima.sharma@pimr.ac.in', area: 'PIMR Scheme 74, Vijay Nagar, Indore' },
+    { name: 'Ritika Porwal', phone: '+91 98272 34567', email: 'ritika.porwal@gmail.com', area: 'Lokmanya Nagar, Indore' },
+    { name: 'Akanksha Dave', phone: '+91 94255 67890', email: 'akanksha.d@gmail.com', area: 'Khandwa Road, Near IT Park, Indore' },
+    { name: 'Vanshika Solanki', phone: '+91 97553 89012', email: 'vanshika.s@gmail.com', area: 'Bada Ganpati, Malharganj, Indore' },
+    { name: 'Disha Mehta', phone: '+91 98939 12345', email: 'disha.mehta@gmail.com', area: 'Scheme 78, Aranya Nagar, Indore' },
+    { name: 'Yashika Bairagi', phone: '+91 99817 23456', email: 'yashika.b@medicaps.ac.in', area: 'CAT Road, Rau, Indore' }
   ];
 
   const orders = [];
@@ -120,10 +130,10 @@ export function generateSeedOrders() {
   }
 
   // ----------------------------------------------------
-  // WEEK 2: DIWALI CAMPAIGN (Days -20 to -14)
-  // EXACTLY 200 Sales (Gifting Master Combos & Hot Water Bags)
+  // WEEK 2: DIWALI MEGA CAMPAIGN (Days -20 to -14)
+  // EXACTLY 1,000 Sales (Gifting Master Combos & Hot Water Bags)
   // ----------------------------------------------------
-  const diwaliDailyCounts = [20, 28, 34, 42, 30, 26, 20]; // sum = 200
+  const diwaliDailyCounts = [110, 135, 160, 210, 155, 125, 105]; // sum = 1000
 
   for (let dayOffset = 20; dayOffset >= 14; dayOffset--) {
     const dayIdx = 20 - dayOffset;

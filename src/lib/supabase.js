@@ -18,8 +18,8 @@ export const supabase = isSupabaseConfigured
 
 // Local fallback store keys
 const STORAGE_KEYS = {
-  ORDERS: 'periodready_orders_v2',
-  CUSTOMERS: 'periodready_customers_v2',
+  ORDERS: 'periodready_orders_v3',
+  CUSTOMERS: 'periodready_customers_v3',
   COSTS: 'periodready_costs_v1',
   CURRENT_USER: 'periodready_auth_user_v1'
 };
@@ -86,10 +86,10 @@ const setLocalData = (key, data) => {
   }
 };
 
-// Ensure initial 4-Week Complete Sales Data (W1: 50, W2: 200, W3: 75, W4: 90 = 415 Sales)
+// Ensure initial 4-Week Complete Sales Data (W1: 50, Diwali: 1,000, W3: 75, W4: 90 = 1,215 Sales)
 export function ensureSeedData() {
   const currentOrders = getLocalData(STORAGE_KEYS.ORDERS, null);
-  if (!currentOrders || currentOrders.length < 400) {
+  if (!currentOrders || currentOrders.length < 1200) {
     const { orders, customers } = generateSeedOrders();
     setLocalData(STORAGE_KEYS.ORDERS, orders);
     setLocalData(STORAGE_KEYS.CUSTOMERS, customers);
