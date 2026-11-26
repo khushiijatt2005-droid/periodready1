@@ -1,7 +1,7 @@
 // Seed data generator for PeriodReady
-// Generates 4 Complete Weekly Sales Milestones (Total 1,215 Sales):
+// Generates 4 Complete Weekly Sales Milestones (Total 4,715 Sales):
 // 1. Week 1 baseline sales: 50 orders (steady launch baseline)
-// 2. Week 2 Diwali Mega Campaign: EXACTLY 1,000 sales (festive gifting surge)
+// 2. Week 2 Diwali Mega Campaign: EXACTLY 4,500 sales (festive gifting surge)
 // 3. Week 3 Expansion: EXACTLY 75 sales (campus PG adoption)
 // 4. Week 4 Active Growth: EXACTLY 90 sales (10-min emergency rapid scale)
 
@@ -131,9 +131,9 @@ export function generateSeedOrders() {
 
   // ----------------------------------------------------
   // WEEK 2: DIWALI MEGA CAMPAIGN (Days -20 to -14)
-  // EXACTLY 1,000 Sales (Gifting Master Combos & Hot Water Bags)
+  // EXACTLY 4,500 Sales (Gifting Master Combos & Hot Water Bags)
   // ----------------------------------------------------
-  const diwaliDailyCounts = [110, 135, 160, 210, 155, 125, 105]; // sum = 1000
+  const diwaliDailyCounts = [500, 600, 750, 950, 700, 550, 450]; // sum = 4500
 
   for (let dayOffset = 20; dayOffset >= 14; dayOffset--) {
     const dayIdx = 20 - dayOffset;
