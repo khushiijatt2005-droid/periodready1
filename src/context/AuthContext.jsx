@@ -199,7 +199,7 @@ export function AuthProvider({ children }) {
         localStorage.setItem(LOCAL_AUTH_KEY, JSON.stringify(adminUser));
         return { success: true, user: adminUser };
       }
-      throw new Error('Invalid admin credentials. Authorized password: Admin@PeriodReady2026');
+      throw new Error('Invalid admin credentials. Please verify your email and password.');
     }
 
     if (found) {

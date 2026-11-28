@@ -46,7 +46,7 @@ export default function AdminPage() {
   const { user, isAdmin, login, logout } = useAuth();
 
   // Login form state for protected view
-  const [adminEmail, setAdminEmail] = useState('periodready1@gmail.com');
+  const [adminEmail, setAdminEmail] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
@@ -120,23 +120,11 @@ export default function AdminPage() {
     if (e) e.preventDefault();
     setLoginError('');
     setLoginLoading(true);
-    const passToUse = adminPassword.trim() || 'Admin@PeriodReady2026';
     try {
-      await login(adminEmail, passToUse);
-    } catch (err) {
-      setLoginError(err.message || 'Invalid admin credentials');
-    } finally {
-      setLoginLoading(false);
-    }
-  };
-
-  const handleDirectAdminLogin = async () => {
-    setLoginError('');
-    setLoginLoading(true);
-    setAdminEmail('periodready1@gmail.com');
-    setAdminPassword('Admin@PeriodReady2026');
-    try {
-      await login('periodready1@gmail.com', 'Admin@PeriodReady2026');
+      if (!adminEmail.trim() || !adminPassword) {
+        throw new Error('Please enter both email and password.');
+      }
+      await login(adminEmail.trim(), adminPassword);
     } catch (err) {
       setLoginError(err.message || 'Invalid admin credentials');
     } finally {
@@ -392,38 +380,17 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* 1-Click Auto Fill & Credentials Display */}
-          <div className="p-4 rounded-2xl bg-lavender border border-lavender-border space-y-2.5 text-xs">
-            <div className="flex items-center justify-between text-indigo font-bold">
-              <span>Admin Login Credentials</span>
-              <span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-semibold border border-emerald-200">Authorized Owner</span>
-            </div>
-            <div className="text-[11px] text-slate-700 space-y-1 font-mono bg-white/80 p-2.5 rounded-xl border border-lavender-border">
-              <div>Email: <strong className="text-indigo font-bold">periodready1@gmail.com</strong></div>
-              <div>Password: <strong className="text-indigo font-bold">Admin@PeriodReady2026</strong></div>
-            </div>
-            <button
-              type="button"
-              onClick={handleDirectAdminLogin}
-              disabled={loginLoading}
-              className="w-full py-2.5 px-3 rounded-xl bg-indigo hover:bg-indigo-dark text-white font-bold text-xs shadow-md shadow-indigo/20 transition-all flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50"
-            >
-              <ShieldCheck className="w-4 h-4 text-rose-light" />
-              <span>{loginLoading ? 'Opening Dashboard…' : '🚀 1-Click Instant Login to Dashboard'}</span>
-            </button>
-          </div>
-
           <form onSubmit={handleAdminLogin} className="space-y-4">
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1">
-                Owner Email
+                Admin Email
               </label>
               <input
                 type="email"
                 required
                 value={adminEmail}
                 onChange={(e) => setAdminEmail(e.target.value)}
-                placeholder="periodready1@gmail.com"
+                placeholder="Enter admin email address"
                 className="w-full p-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo/30"
               />
             </div>
@@ -434,9 +401,10 @@ export default function AdminPage() {
               </label>
               <input
                 type="password"
+                required
                 value={adminPassword}
                 onChange={(e) => setAdminPassword(e.target.value)}
-                placeholder="Enter password or click Auto-Fill above"
+                placeholder="Enter password"
                 className="w-full p-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo/30"
               />
             </div>
