@@ -101,7 +101,7 @@ export default function AboutPage() {
     {
       title: 'Regular Period Kit (₹179)',
       when: 'Full day lectures, PG stay, or workday replenishment.',
-      contains: '3 XL Pads, Hand Sanitizer, Disposal Bags, Guide Card.',
+      contains: '1 Set of XL Pads, Hand Sanitizer, Disposal Bags, Guide Card.',
       action: 'Daily Essential'
     },
     {

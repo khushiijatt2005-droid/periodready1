@@ -44,7 +44,7 @@ export const PRODUCTS = [
     ],
     description: 'Your complete sanitary replenishment for full-day campus lectures, office shifts or PG stays.',
     features: [
-      '3 x Premium XL Sanitary Pads (High absorption for daily comfort)',
+      '1 set of Premium XL Sanitary Pads (High absorption for daily comfort)',
       '1 x Mini Hand Sanitizer',
       '1 x Set of Eco-Friendly Disposal Bags',
       '1 x Educational Mini-Period Guide Card'
